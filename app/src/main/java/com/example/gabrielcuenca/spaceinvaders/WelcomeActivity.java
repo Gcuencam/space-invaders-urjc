@@ -19,7 +19,7 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void initGame(View view) {
-        Intent intent = new Intent(WelcomeActivity.this, GameActivity.class);
+        Intent intent = new Intent(WelcomeActivity.this, GameViewActivity.class);
         startActivity(intent);
     }
 }
