@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -19,7 +20,13 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void initGame(View view) {
-        Intent intent = new Intent(WelcomeActivity.this, GameViewActivity.class);
-        startActivity(intent);
+        CheckBox edad = findViewById(R.id.checkEdad);
+        if(edad.isChecked()){
+            //opcion para adultos
+            Intent intent = new Intent(WelcomeActivity.this, GameViewActivity.class);
+            startActivity(intent);
+        }else{
+            //opcion para niños
+        }
     }
 }
