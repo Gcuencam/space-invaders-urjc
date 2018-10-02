@@ -1,13 +1,19 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.gabrielcuenca.spaceinvaders.R;
 
 public class View extends SurfaceView implements Runnable {
 
@@ -98,7 +104,8 @@ public class View extends SurfaceView implements Runnable {
 
         // Aquí vamos a inicializar todos los objetos del juego
 
-        // Hacer una nueva nave espacial del jugador
+        // Haz una nave espacial para un jugador nuevo
+        playerShip = new Ship(context, screenX, screenY);
 
         // Preparar las balas del jugador
 
@@ -148,6 +155,7 @@ public class View extends SurfaceView implements Runnable {
         boolean lost = false;
 
         // Mueve la nave espacial del jugador
+        playerShip.update(fps);
 
         // Actualiza a los invaders si se ven
 
@@ -182,13 +190,20 @@ public class View extends SurfaceView implements Runnable {
             // Bloquea el lienzo para que este listo para dibujar
             canvas = ourHolder.lockCanvas();
 
-            // Dibuja el color del fondo
-            canvas.drawColor(Color.argb(255, 26, 128, 182));
+            // Dibujamos el fondo de pantalla.
+            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.nebula_aqua_pink_jpg);
+            bitmap = Bitmap.createScaledBitmap(bitmap,
+                    (int) (screenX),
+                    (int) (screenY),
+                    false);
+
+            canvas.drawBitmap(bitmap, 0, 0, paint);
 
             // Escoje el color de la brocha para dibujar
             paint.setColor(Color.argb(255, 255, 255, 255));
 
             // Dibuja a la nave espacial del jugador
+            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - 150, paint);
 
             // Dibuja a los invaders
 
@@ -200,7 +215,7 @@ public class View extends SurfaceView implements Runnable {
 
             // Dibuja la puntuación y las vidas restantes
             // Cambia el color de la brocha
-            paint.setColor(Color.argb(255, 249, 129, 0));
+            paint.setColor(Color.argb(255, 249, 255, 0));
             paint.setTextSize(40);
             canvas.drawText("Score: " + score + " Lives: " + lives, 10, 50, paint);
 
