@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -252,13 +253,21 @@ public class View extends SurfaceView implements Runnable {
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
             // El jugador ha tocado la pantalla
-            case MotionEvent.ACTION_DOWN:
-                if(motionEvent.getX() < (screenX/2)){
-                    //se mueve a la izq
-                    playerShip.setShipMoving(playerShip.LEFT);
+            case (MotionEvent.ACTION_DOWN):
+
+                if((screenX/3< motionEvent.getX()) & (motionEvent.getX() <= (screenX/3)*2)){
+                    //parte central de la pantalla
+                    System.out.println("pimpam trucu trucu");
+
                 }else{
-                    //se mueve a la dcha
-                    playerShip.setShipMoving(playerShip.RIGHT);
+                    //laterales de la pantalla
+                    if(motionEvent.getX() <= (screenX/3)){
+                        //se mueve a la izq
+                        playerShip.setShipMoving(playerShip.LEFT);
+                    }else if (((screenX/3)*2) < motionEvent.getX()){
+                        //se mueve a la dcha
+                        playerShip.setShipMoving(playerShip.RIGHT);
+                    }
                 }
                 break;
 
