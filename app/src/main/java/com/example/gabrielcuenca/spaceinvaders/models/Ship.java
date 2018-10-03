@@ -106,4 +106,8 @@ public class Ship {
         rect.right = x + length;
 
     }
+
+    public void setShipMoving(int shipMoving) {
+        this.shipMoving = shipMoving;
+    }
 }

@@ -69,7 +69,7 @@ public class View extends SurfaceView implements Runnable {
     int score = 0;
 
     // Vidas
-    private int lives = 3;
+    private int lives = 1;
 
     // ¿Que tan amenazador debe de ser el sonido?
     private long menaceInterval = 1000;
@@ -253,11 +253,19 @@ public class View extends SurfaceView implements Runnable {
 
             // El jugador ha tocado la pantalla
             case MotionEvent.ACTION_DOWN:
-
+                if(motionEvent.getX() < (screenX/2)){
+                    //se mueve a la izq
+                    playerShip.setShipMoving(playerShip.LEFT);
+                }else{
+                    //se mueve a la dcha
+                    playerShip.setShipMoving(playerShip.RIGHT);
+                }
                 break;
 
             // El jugador a retirado el dedo de la pantalla
             case MotionEvent.ACTION_UP:
+                //se para
+                playerShip.setShipMoving(playerShip.STOPPED);
 
                 break;
         }
