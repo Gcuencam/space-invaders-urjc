@@ -15,8 +15,9 @@ public class Bala {
 
     //DIRECCION
     private int direccion = -1; //no se mueve
-    private final int UP = 1;
-    private final int DOWN = 0;
+    public final int UP = 1;
+    public final int DOWN = 0;
+    private float velocidad = 300;
 
     //¿Está activado?
     private boolean activado = false;
@@ -89,9 +90,9 @@ public class Bala {
 
     public void update(long fps){
         if(direccion==UP){
-            y = y - fps;
+            y = y - velocidad/fps;
         }else{
-            y = y + fps;
+            y = y + velocidad/fps;
         }
 
         rectf.left = x;

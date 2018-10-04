@@ -69,15 +69,8 @@ public class View extends SurfaceView implements Runnable {
     // La puntuación
     int score = 0;
 
-    // Vidas
-    private int lives = 1;
 
-    // ¿Que tan amenazador debe de ser el sonido?
-    private long menaceInterval = 1000;
-    // Cual amenazante sonido debe de seguir en reproducirse
-    private boolean uhOrOh;
-    // Cuando fué la última vez que reproducimos un amenazante sonido
-    private long lastMenaceTime = System.currentTimeMillis();
+
 
     // Cuando inicializamos (call new()) en gameView
     // Este método especial de constructor se ejecuta
@@ -109,7 +102,7 @@ public class View extends SurfaceView implements Runnable {
         playerShip = new Ship(context, screenX, screenY);
 
         // Preparar las balas del jugador
-        Bala bala = new Bala(screenY);
+        bala = new Bala(screenY);
 
         // Inicializar la formación de invadersBullets
         for (int i = 0; i <maxInvaderBullets ; i++) {
@@ -163,34 +156,44 @@ public class View extends SurfaceView implements Runnable {
 
         // Actualiza a los invaders si se ven
 
+
         // Actualiza a todas las balas de los invaders si están activas
 
         // ¿Chocó algún invader en el extremo de la pantalla?
+        if (bumped) {
+
+            // Mueve a todos los invaders hacia abajo y cambia la dirección
+
+
+            // Incrementa el nivel de amenaza
+            // al hacer los sonidos más frecuentes
+        }
 
         if (lost) {
             prepareLevel();
         }
 
-        // Actualiza las balas del jugador y de los invaders
-        if(bala.estaActivado()){
-            bala.update(fps);
-        }
-        for (int i = 0; i <maxInvaderBullets ; i++) {
-            if(invadersBullets[i].estaActivado()){
-                invadersBullets[i].update(fps);
-            }
-        }
-        // ¿Han golpeado las balas del jugador la parte superior de la pantalla?
+        // Actualiza las balas del jugador
 
-        // ¿Ha golpeado alguna bala de un invader la parte inferior de la pantalla?
 
-        // ¿Ha golpeado la bala del jugador a un invader?
+        // Actualiza todas las balas de los invaders si están activas
 
-        // ¿Ha golpeado alguna bala de los invaders a un ladrillo de guarida?
 
-        // ¿Ha golpeado una bala del jugador a un ladrillo de guarida?
+        // Ha tocado la parte alta de la pantalla la bala del jugador
 
-        // ¿Ha golpeado una bala de algún invader a la nave espacial del jugador?
+
+        // Ha tocado la parte baja de la pantalla la bala del invader
+
+        // Ha tocado la bala del jugador a algún invader
+
+
+        // Ha impactado una bala alienígena a un ladrillo de la guarida
+
+
+        // Ha impactado una bala del jugador a un ladrillo de la guarida
+
+        // Ha impactado una bala de un invader a la nave espacial del jugador
+
 
     }
 
@@ -201,45 +204,34 @@ public class View extends SurfaceView implements Runnable {
             // Bloquea el lienzo para que este listo para dibujar
             canvas = ourHolder.lockCanvas();
 
-            // Dibujamos el fondo de pantalla.
-            Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.nebula_aqua_pink_jpg);
-            bitmap = Bitmap.createScaledBitmap(bitmap,
-                    (int) (screenX),
-                    (int) (screenY),
-                    false);
-
-            canvas.drawBitmap(bitmap, 0, 0, paint);
+            // Dibuja el color del fondo
+            canvas.drawColor(Color.argb(234, 14, 45, 60));
 
             // Escoje el color de la brocha para dibujar
             paint.setColor(Color.argb(255, 255, 255, 255));
 
             // Dibuja a la nave espacial del jugador
-            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - 150, paint);
-
+            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX()+50, screenY - 150, paint);
             // Dibuja a los invaders
 
-            // Dibuja a los ladrillos si están visibles
+            // Dibuja los ladrillos si están visibles
+
 
             // Dibuja a las balas del jugador si están activas
-            if(bala.estaActivado()){
-                canvas.drawRect(bala.getRectf(),paint);
-            }
-            // Dibuja a las balas de los invaders si están activas
-            for (int i = 0; i <maxInvaderBullets ; i++) {
-                if(invadersBullets[i].estaActivado()){
-                    canvas.drawRect(invadersBullets[i].getRectf(),paint);
-                }
-            }
+
+            // Actualiza todas las balas de los invaders si están activas
+
             // Dibuja la puntuación y las vidas restantes
             // Cambia el color de la brocha
-            paint.setColor(Color.argb(255, 249, 255, 0));
-            paint.setTextSize(40);
-            canvas.drawText("Score: " + score + " Lives: " + lives, 10, 50, paint);
+            paint.setColor(Color.argb(255, 50, 255, 0));
+            paint.setTextSize(60);
+            canvas.drawText("Score: " + score, 10, 50, paint);
 
             // Extrae todo a la pantalla
             ourHolder.unlockCanvasAndPost(canvas);
         }
     }
+
 
     // Si SpaceInvadersActivity es pausado/detenido
     // apaga nuestra secuencia.

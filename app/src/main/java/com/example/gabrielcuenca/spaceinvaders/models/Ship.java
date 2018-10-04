@@ -77,6 +77,10 @@ public class Ship {
         return x;
     }
 
+    public float getY() {
+        return y;
+    }
+
     public float getLength(){
         return length;
     }
@@ -99,6 +103,7 @@ public class Ship {
         if(shipMoving == RIGHT){
             x = x + shipSpeed / fps;
         }
+
 
         // Actualiza rect el cual es usado para detectar impactos
         rect.top = y;
