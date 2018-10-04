@@ -259,7 +259,7 @@ public class View extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
 
                 paused = false;
-                if(motionEvent.getY() >= screenY/2) {
+                if(motionEvent.getY() <= screenY/2) {
                     if ((screenX / 3 < motionEvent.getX()) && (motionEvent.getX() <= (screenX / 3) * 2)) {
                         //parte central de la pantalla
                         System.out.println("pimpam trucu trucu");
