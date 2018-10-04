@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.view.Display;
+
+import com.example.gabrielcuenca.spaceinvaders.models.Bala;
 import com.example.gabrielcuenca.spaceinvaders.models.View;
 
 

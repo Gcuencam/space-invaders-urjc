@@ -60,7 +60,7 @@ public class Ship {
                 false);
 
         // Qué tan rápido va la nave espacial en pixeles por segundo
-        shipSpeed = 350;
+        shipSpeed = 200;
     }
 
     public RectF getRect(){
@@ -83,8 +83,9 @@ public class Ship {
 
     // Este método será usado para cambiar/establecer si la nave
     // espacial va a la izquierda, la derecha o no se mueve
-    public void setMovementState(int state){
-        shipMoving = state;
+
+    public void setShipMoving(int shipMoving) {
+        this.shipMoving = shipMoving;
     }
 
     // Este método de update será llamado desde el update en SpaceInvadersView
@@ -107,7 +108,4 @@ public class Ship {
 
     }
 
-    public void setShipMoving(int shipMoving) {
-        this.shipMoving = shipMoving;
-    }
 }

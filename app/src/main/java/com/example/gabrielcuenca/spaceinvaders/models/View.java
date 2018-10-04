@@ -51,12 +51,12 @@ public class View extends SurfaceView implements Runnable {
     private Ship playerShip;
 
     // La bala del jugador
-    // private Bullet bullet;
+    private Bala bala;
 
     // Las balas de los Invaders
-    // private Bullet[] invadersBullets = new Bullet[200];
-    private int nextBullet;
+    //private int nextBullet=0;
     private int maxInvaderBullets = 10;
+    private Bala[] invadersBullets = new Bala[maxInvaderBullets];
 
     // Hasta 60 Invaders
     // Invader[] invaders = new Invader[60];
@@ -109,9 +109,12 @@ public class View extends SurfaceView implements Runnable {
         playerShip = new Ship(context, screenX, screenY);
 
         // Preparar las balas del jugador
+        Bala bala = new Bala(screenY);
 
         // Inicializar la formación de invadersBullets
-
+        for (int i = 0; i <maxInvaderBullets ; i++) {
+            invadersBullets[i]=new Bala(screenY);
+        }
         // Construir un ejercito de invaders
 
         // Construir las guaridas
@@ -168,8 +171,15 @@ public class View extends SurfaceView implements Runnable {
             prepareLevel();
         }
 
-        // Actualiza las balas del jugador
-
+        // Actualiza las balas del jugador y de los invaders
+        if(bala.estaActivado()){
+            bala.update(fps);
+        }
+        for (int i = 0; i <maxInvaderBullets ; i++) {
+            if(invadersBullets[i].estaActivado()){
+                invadersBullets[i].update(fps);
+            }
+        }
         // ¿Han golpeado las balas del jugador la parte superior de la pantalla?
 
         // ¿Ha golpeado alguna bala de un invader la parte inferior de la pantalla?
@@ -211,9 +221,15 @@ public class View extends SurfaceView implements Runnable {
             // Dibuja a los ladrillos si están visibles
 
             // Dibuja a las balas del jugador si están activas
-
+            if(bala.estaActivado()){
+                canvas.drawRect(bala.getRectf(),paint);
+            }
             // Dibuja a las balas de los invaders si están activas
-
+            for (int i = 0; i <maxInvaderBullets ; i++) {
+                if(invadersBullets[i].estaActivado()){
+                    canvas.drawRect(invadersBullets[i].getRectf(),paint);
+                }
+            }
             // Dibuja la puntuación y las vidas restantes
             // Cambia el color de la brocha
             paint.setColor(Color.argb(255, 249, 255, 0));
@@ -250,16 +266,20 @@ public class View extends SurfaceView implements Runnable {
     @Override
     public boolean onTouchEvent(MotionEvent motionEvent) {
 
+
+
         switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
 
             // El jugador ha tocado la pantalla
-            case (MotionEvent.ACTION_DOWN):
+            case MotionEvent.ACTION_DOWN:
 
-                if((screenX/3< motionEvent.getX()) & (motionEvent.getX() <= (screenX/3)*2)){
+                paused = false;
+
+                if((screenX/3 < motionEvent.getX()) && (motionEvent.getX() <= (screenX/3)*2)){
                     //parte central de la pantalla
                     System.out.println("pimpam trucu trucu");
 
-                }else{
+                }
                     //laterales de la pantalla
                     if(motionEvent.getX() <= (screenX/3)){
                         //se mueve a la izq
@@ -268,17 +288,17 @@ public class View extends SurfaceView implements Runnable {
                         //se mueve a la dcha
                         playerShip.setShipMoving(playerShip.RIGHT);
                     }
-                }
+
                 break;
 
             // El jugador a retirado el dedo de la pantalla
             case MotionEvent.ACTION_UP:
                 //se para
                 playerShip.setShipMoving(playerShip.STOPPED);
-
                 break;
         }
 
         return true;
     }
+
 }
