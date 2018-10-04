@@ -1,6 +1,8 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,6 +10,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.gabrielcuenca.spaceinvaders.R;
 
 public class View extends SurfaceView implements Runnable {
 
@@ -198,7 +202,7 @@ public class View extends SurfaceView implements Runnable {
             canvas = ourHolder.lockCanvas();
 
             // Dibuja el color del fondo
-            canvas.drawColor(Color.argb(234, 14, 45, 60));
+            canvas.drawColor(Color.argb(255, 14, 45, 60));
 
             // Escoje el color de la brocha para dibujar
             paint.setColor(Color.argb(255, 255, 255, 255));
