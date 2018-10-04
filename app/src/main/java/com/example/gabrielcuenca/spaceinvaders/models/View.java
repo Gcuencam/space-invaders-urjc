@@ -1,20 +1,13 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import com.example.gabrielcuenca.spaceinvaders.R;
 
 public class View extends SurfaceView implements Runnable {
 
@@ -51,12 +44,12 @@ public class View extends SurfaceView implements Runnable {
     private Ship playerShip;
 
     // La bala del jugador
-    private Bala bala;
+    private Misile bala;
 
     // Las balas de los Invaders
     //private int nextBullet=0;
     private int maxInvaderBullets = 10;
-    private Bala[] invadersBullets = new Bala[maxInvaderBullets];
+    private Misile[] invadersBullets = new Misile[maxInvaderBullets];
 
     // Hasta 60 Invaders
     // Invader[] invaders = new Invader[60];
@@ -102,11 +95,11 @@ public class View extends SurfaceView implements Runnable {
         playerShip = new Ship(context, screenX, screenY);
 
         // Preparar las balas del jugador
-        bala = new Bala(screenY);
+        bala = new Misile(screenY);
 
         // Inicializar la formación de invadersBullets
         for (int i = 0; i <maxInvaderBullets ; i++) {
-            invadersBullets[i]=new Bala(screenY);
+            invadersBullets[i]=new Misile(screenY);
         }
         // Construir un ejercito de invaders
 
@@ -266,21 +259,22 @@ public class View extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
 
                 paused = false;
+                if(motionEvent.getY() >= screenY/2) {
+                    if ((screenX / 3 < motionEvent.getX()) && (motionEvent.getX() <= (screenX / 3) * 2)) {
+                        //parte central de la pantalla
+                        System.out.println("pimpam trucu trucu");
 
-                if((screenX/3 < motionEvent.getX()) && (motionEvent.getX() <= (screenX/3)*2)){
-                    //parte central de la pantalla
-                    System.out.println("pimpam trucu trucu");
-
-                }
+                    }
+                }else {
                     //laterales de la pantalla
-                    if(motionEvent.getX() <= (screenX/3)){
+                    if (motionEvent.getX() <= (screenX / 3)) {
                         //se mueve a la izq
                         playerShip.setShipMoving(playerShip.LEFT);
-                    }else if (((screenX/3)*2) < motionEvent.getX()){
+                    } else if (((screenX / 3) * 2) < motionEvent.getX()) {
                         //se mueve a la dcha
                         playerShip.setShipMoving(playerShip.RIGHT);
                     }
-
+                }
                 break;
 
             // El jugador a retirado el dedo de la pantalla

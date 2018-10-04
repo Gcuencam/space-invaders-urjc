@@ -2,7 +2,7 @@ package com.example.gabrielcuenca.spaceinvaders.models;
 
 import android.graphics.RectF;
 
-public class Bala {
+public class Misile {
 
     //region Atributos
 
@@ -17,10 +17,10 @@ public class Bala {
     private int direccion = -1; //no se mueve
     public final int UP = 1;
     public final int DOWN = 0;
-    private float velocidad = 300;
+    private float speed = 300;
 
-    //¿Está activado?
-    private boolean activado = false;
+    //¿Está activate?
+    private boolean activate = false;
 
     //Dimensiones
     private int width;
@@ -29,7 +29,7 @@ public class Bala {
     //endregion
 
     //CONSTRUCTOR
-    public Bala (int screenY){
+    public Misile(int screenY){
         this.width = 1;
         this.height = screenY / 20;
         this.rectf = new RectF();
@@ -40,15 +40,15 @@ public class Bala {
     }
 
     public void desactivar(){
-        this.activado = false;
+        this.activate = false;
     }
 
     public void activar(){
-        this.activado = true;
+        this.activate = true;
     }
 
-    public boolean estaActivado(){
-       return this.activado;
+    public boolean isActivated(){
+       return this.activate;
     }
 
     public float getX() {
@@ -68,7 +68,7 @@ public class Bala {
     }
 
     //Te devuelve donde está el extremo de la bala que va a chocar
-    public float extremo(){
+    public float extrem(){
         if(this.direccion==DOWN){
             return y + height;
         }else{
@@ -76,8 +76,8 @@ public class Bala {
         }
     }
 
-    public boolean disparo(float coordenadaX, float coordenadaY, int dir){
-        if(!this.activado){
+    public boolean shoot(float coordenadaX, float coordenadaY, int dir){
+        if(!this.activate){
             setX(coordenadaX);
             setY(coordenadaY);
             activar();
@@ -90,9 +90,9 @@ public class Bala {
 
     public void update(long fps){
         if(direccion==UP){
-            y = y - velocidad/fps;
+            y = y - speed /fps;
         }else{
-            y = y + velocidad/fps;
+            y = y + speed /fps;
         }
 
         rectf.left = x;
