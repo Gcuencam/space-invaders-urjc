@@ -1,8 +1,6 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,8 +8,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import com.example.gabrielcuenca.spaceinvaders.R;
 
 public class View extends SurfaceView implements Runnable {
 
@@ -51,12 +47,12 @@ public class View extends SurfaceView implements Runnable {
     private Misile bala;
 
     // Las balas de los Invaders
-    //private int nextBullet=0;
-    private int maxInvaderBullets = 10;
-    private Misile[] invadersBullets = new Misile[maxInvaderBullets];
+    private int nextMisile =0;
+    private int maxInvaderMisile = 10;
+    private Misile[] invadersMisiles = new Misile[maxInvaderMisile];
 
     // Hasta 60 Invaders
-    // Invader[] invaders = new Invader[60];
+    Invader[] invaders = new Invader[40];
     int numInvaders = 0;
 
     // Las guaridas del jugador están construidas a base de ladrillos
@@ -101,11 +97,18 @@ public class View extends SurfaceView implements Runnable {
         // Preparar las balas del jugador
         bala = new Misile(screenY);
 
-        // Inicializar la formación de invadersBullets
-        for (int i = 0; i <maxInvaderBullets ; i++) {
-            invadersBullets[i]=new Misile(screenY);
+        // Inicializar la formación de invadersMisiles
+        for (int i = 0; i < maxInvaderMisile; i++) {
+            invadersMisiles[i]=new Misile(screenY);
         }
         // Construir un ejercito de invaders
+        numInvaders = 0;
+        for (int i = 0; i < 6 ; i++) {
+            for (int j = 0; j < 3 ; j++) {
+                invaders[numInvaders] = new Invader(context,j,i,screenY,screenX);
+                numInvaders++;
+            }
+        }
 
         // Construir las guaridas
         numBricks = 0;
@@ -161,14 +164,34 @@ public class View extends SurfaceView implements Runnable {
         playerShip.update(fps);
 
         // Actualiza a los invaders si se ven
+        for (int i = 0; i <numInvaders ; i++) {
+            if(invaders[i].isVisible()){
+                invaders[i].update(fps,screenX);
+            }
+            if(invaders[i].shoot()){
+                if(invadersMisiles[nextMisile].shoot(invaders[i].getXleft() + invaders[i].getWidth()/2,
+                        invaders[i].getY(),bala.DOWN)){
+                    nextMisile++;
+                }
+                if(nextMisile==maxInvaderMisile){
+                    nextMisile=0;
+                }
+
+                //Colisión
+            }
+        }
 
 
         // Actualiza a todas las balas de los invaders si están activas
 
         // ¿Chocó algún invader en el extremo de la pantalla?
         if (bumped) {
-
-            // Mueve a todos los invaders hacia abajo y cambia la dirección
+            for (int i = 0; i <numInvaders ; i++) {
+                invaders[i].automaticMove();
+                if(invaders[i].getY() > playerShip.getY()){
+                    lost = true;
+                }
+            }
 
 
             // Incrementa el nivel de amenaza
@@ -220,9 +243,16 @@ public class View extends SurfaceView implements Runnable {
             canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX()+50, screenY - 150, paint);
             // Dibuja a los invaders
 
+
             // Escoje el color de la brocha para dibujar
             paint.setColor(Color.argb(255, 255, 191, 0));
 
+
+            for(int i = 0; i < numInvaders; i++){
+                if(invaders[i].isVisible()) {
+                        canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
+                }
+            }
             // Dibuja los ladrillos si están visibles
             for(int i = 0; i < numBricks; i++){
                 if(bricks[i].getVisibility()) {

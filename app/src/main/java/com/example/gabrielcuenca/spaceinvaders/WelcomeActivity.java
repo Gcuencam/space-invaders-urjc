@@ -20,8 +20,8 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     public void initGame(View view) {
-        CheckBox edad = findViewById(R.id.checkEdad);
-        if(edad.isChecked()){
+        CheckBox age = findViewById(R.id.checkEdad);
+        if(age.isChecked()){
             //opcion para adultos
             Intent intent = new Intent(WelcomeActivity.this, GameViewActivity.class);
             startActivity(intent);

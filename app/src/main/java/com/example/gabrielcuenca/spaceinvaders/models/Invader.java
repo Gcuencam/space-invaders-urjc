@@ -81,7 +81,7 @@ public class Invader {
         return yup;
     }
 
-    public void update(long fps){
+    public void update(long fps, int screenX){
         if(direccion == LEFT){
             xleft = xleft - velocidad/fps;
         }else{
@@ -93,6 +93,10 @@ public class Invader {
 
         rectf.top = yup;
         rectf.bottom = yup + width;
+
+        if(xleft==0 || xleft +height==screenX){
+            automaticMove();
+        }
     }
 
     public void automaticMove(){
