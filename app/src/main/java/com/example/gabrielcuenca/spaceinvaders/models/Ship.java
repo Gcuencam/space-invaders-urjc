@@ -51,7 +51,7 @@ public class Ship {
         // Inicializa el bitmap
         bitmap = BitmapFactory.decodeResource(
                 context.getResources(),
-                R.drawable.ship_1);
+                R.drawable.ship8bitv3);
 
         // ajusta el bitmap a un tamaño proporcionado a la resolución de la pantalla
         bitmap = Bitmap.createScaledBitmap(bitmap,

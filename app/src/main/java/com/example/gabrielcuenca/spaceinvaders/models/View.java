@@ -211,7 +211,7 @@ public class View extends SurfaceView implements Runnable {
             canvas = ourHolder.lockCanvas();
 
             // Dibuja el color del fondo
-            canvas.drawColor(Color.argb(255, 14, 45, 60));
+            canvas.drawColor(Color.argb(255, 0, 0, 0));
 
             // Escoje el color de la brocha para dibujar
             paint.setColor(Color.argb(255, 255, 255, 255));
@@ -220,7 +220,9 @@ public class View extends SurfaceView implements Runnable {
             canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX()+50, screenY - 150, paint);
             // Dibuja a los invaders
 
-            // Dibuja los ladrillos si están visibles
+            // Escoje el color de la brocha para dibujar
+            paint.setColor(Color.argb(255, 255, 191, 0));
+
             // Dibuja los ladrillos si están visibles
             for(int i = 0; i < numBricks; i++){
                 if(bricks[i].getVisibility()) {
@@ -235,7 +237,7 @@ public class View extends SurfaceView implements Runnable {
 
             // Dibuja la puntuación y las vidas restantes
             // Cambia el color de la brocha
-            paint.setColor(Color.argb(255, 50, 255, 0));
+            paint.setColor(Color.argb(255, 255, 255, 255));
             paint.setTextSize(60);
             canvas.drawText("Score: " + score, 10, 50, paint);
 
