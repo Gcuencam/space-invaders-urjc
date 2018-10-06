@@ -167,6 +167,9 @@ public class View extends SurfaceView implements Runnable {
         for (int i = 0; i <numInvaders ; i++) {
             if(invaders[i].isVisible()){
                 invaders[i].update(fps,screenX);
+                if(invaders[i].getXleft()==0 || invaders[i].getXleft() + invaders[i].getHeight()==screenX){
+                    bumped=true;
+                }
             }
             if(invaders[i].shoot()){
                 if(invadersMisiles[nextMisile].shoot(invaders[i].getXleft() + invaders[i].getWidth()/2,
@@ -178,12 +181,25 @@ public class View extends SurfaceView implements Runnable {
                 }
 
                 //Colisión
+                if (invaders[i].getXleft() > screenX - invaders[i].getHeight()
+                        || invaders[i].getXleft() < 0){
+
+                    bumped = true;
+
+                }
             }
         }
 
+        if(bala.isActivated()){
+            bala.update(fps);
+        }
 
         // Actualiza a todas las balas de los invaders si están activas
-
+        for(int i = 0; i < invadersMisiles.length; i++){
+            if(invadersMisiles[i].isActivated()) {
+                canvas.drawRect(invadersMisiles[i].getRectf(), paint);
+            }
+        }
         // ¿Chocó algún invader en el extremo de la pantalla?
         if (bumped) {
             for (int i = 0; i <numInvaders ; i++) {
@@ -262,6 +278,9 @@ public class View extends SurfaceView implements Runnable {
 
 
             // Dibuja a las balas del jugador si están activas
+            if(bala.isActivated()) {
+                canvas.drawRect(bala.getRectf(), paint);
+            }
 
             // Actualiza todas las balas de los invaders si están activas
 
@@ -313,7 +332,7 @@ public class View extends SurfaceView implements Runnable {
                 if(motionEvent.getY() <= screenY/2) {
                     if ((screenX / 3 < motionEvent.getX()) && (motionEvent.getX() <= (screenX / 3) * 2)) {
                         //parte central de la pantalla
-                        System.out.println("pimpam trucu trucu");
+                        bala.shoot(playerShip.getX(),playerShip.getY(),bala.UP);
 
                     }
                 }else {

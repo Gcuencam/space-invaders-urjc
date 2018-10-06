@@ -29,7 +29,7 @@ public class Invader {
         //direccion
     private final int LEFT = 1;
     private final int RIGT = 2;
-    private int direccion = 1;
+    private int direccion = 2;
 
     private boolean isVisible;
     //endregion
@@ -42,15 +42,15 @@ public class Invader {
 
         isVisible = true;
 
-        int margen = pantallaX/30;
+        int margen = pantallaX/120;
 
         yup = columna * (width + margen);
 
         xleft = fila * (width + margen);
 
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.invader);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.marcianito_invader);
 
-        velocidad = 40;
+        velocidad = 100;
     }
 
     public void makeInvisible(){
@@ -94,9 +94,6 @@ public class Invader {
         rectf.top = yup;
         rectf.bottom = yup + width;
 
-        if(xleft==0 || xleft +height==screenX){
-            automaticMove();
-        }
     }
 
     public void automaticMove(){

@@ -2,7 +2,9 @@ package com.example.gabrielcuenca.spaceinvaders;
 
 import android.app.Activity;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Display;
 
 import com.example.gabrielcuenca.spaceinvaders.models.View;

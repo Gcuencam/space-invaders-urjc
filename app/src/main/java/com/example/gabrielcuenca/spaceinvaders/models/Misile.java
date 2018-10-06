@@ -17,7 +17,7 @@ public class Misile {
     private int direccion = -1; //no se mueve
     public final int UP = 1;
     public final int DOWN = 0;
-    private float speed = 300;
+    private float speed = 400;
 
     //¿Está activate?
     private boolean activate = false;
@@ -30,7 +30,7 @@ public class Misile {
 
     //CONSTRUCTOR
     public Misile(int screenY){
-        this.width = 1;
+        this.width = 9;
         this.height = screenY / 20;
         this.rectf = new RectF();
     }
@@ -80,6 +80,7 @@ public class Misile {
         if(!this.activate){
             setX(coordenadaX);
             setY(coordenadaY);
+            this.direccion=dir;
             activar();
             return true;
         }else{
