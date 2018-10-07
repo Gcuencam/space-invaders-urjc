@@ -97,11 +97,15 @@ public class Ship {
 // que están en x si es necesario
     public void update(long fps){
         if(shipMoving == LEFT){
-            x = x - shipSpeed / fps;
+            if(x>0){
+                x = x - shipSpeed / fps;
+            }
         }
 
         if(shipMoving == RIGHT){
-            x = x + shipSpeed / fps;
+            if(x<length*9){
+                x = x + shipSpeed / fps;
+            }
         }
 
 

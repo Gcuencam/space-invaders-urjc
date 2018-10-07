@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -46,13 +48,15 @@ public class View extends SurfaceView implements Runnable {
     // La bala del jugador
     private Misile bala;
 
+    private int maxInvaders=60;
+
     // Las balas de los Invaders
     private int nextMisile =0;
-    private int maxInvaderMisile = 10;
+    private int maxInvaderMisile = 1;
     private Misile[] invadersMisiles = new Misile[maxInvaderMisile];
 
     // Hasta 60 Invaders
-    Invader[] invaders = new Invader[40];
+    Invader[] invaders = new Invader[maxInvaders];
     int numInvaders = 0;
 
     // Las guaridas del jugador están construidas a base de ladrillos
@@ -97,10 +101,7 @@ public class View extends SurfaceView implements Runnable {
         // Preparar las balas del jugador
         bala = new Misile(screenY);
 
-        // Inicializar la formación de invadersMisiles
-        for (int i = 0; i < maxInvaderMisile; i++) {
-            invadersMisiles[i]=new Misile(screenY);
-        }
+
         // Construir un ejercito de invaders
         numInvaders = 0;
         for (int i = 0; i < 6 ; i++) {
@@ -108,6 +109,10 @@ public class View extends SurfaceView implements Runnable {
                 invaders[numInvaders] = new Invader(context,j,i,screenY,screenX);
                 numInvaders++;
             }
+        }
+        // Inicializar la formación de invadersMisiles
+        for (int i = 0; i < maxInvaderMisile; i++) {
+            invadersMisiles[i]=new Misile(screenY);
         }
 
         // Construir las guaridas
@@ -125,7 +130,6 @@ public class View extends SurfaceView implements Runnable {
 
     @Override
     public void run() {
-
         while (playing) {
 
             // Captura el tiempo actual en milisegundos en startFrameTime
@@ -172,22 +176,28 @@ public class View extends SurfaceView implements Runnable {
                 }
             }
             if(invaders[i].shoot()){
-                if(invadersMisiles[nextMisile].shoot(invaders[i].getXleft() + invaders[i].getWidth()/2,
-                        invaders[i].getY(),bala.DOWN)){
-                    nextMisile++;
-                }
-                if(nextMisile==maxInvaderMisile){
-                    nextMisile=0;
+                if(invadersMisiles[nextMisile].shoot(invaders[i].getXleft()*2,
+                        invaders[i].getY() + invaders[i].getHeight()*3,bala.DOWN)){
+
+                    if(nextMisile==maxInvaderMisile-1){
+                        nextMisile=0;
+                    }else{
+                        nextMisile++;
+                    }
                 }
 
-                //Colisión
-                if (invaders[i].getXleft() > screenX - invaders[i].getHeight()
-                        || invaders[i].getXleft() < 0){
 
-                    bumped = true;
-
-                }
             }
+            //Colisión
+            if (invaders[i].getXleft() > screenX - invaders[i].getWidth()
+                    || invaders[i].getXleft() < 0) {
+
+                bumped = true;
+            }
+        }
+
+        if(lost){
+            pause();
         }
 
         if(bala.isActivated()){
@@ -195,9 +205,9 @@ public class View extends SurfaceView implements Runnable {
         }
 
         // Actualiza a todas las balas de los invaders si están activas
-        for(int i = 0; i < invadersMisiles.length; i++){
+        for(int i = 0; i < maxInvaderMisile; i++){
             if(invadersMisiles[i].isActivated()) {
-                canvas.drawRect(invadersMisiles[i].getRectf(), paint);
+                invadersMisiles[i].update(fps);
             }
         }
         // ¿Chocó algún invader en el extremo de la pantalla?
@@ -208,36 +218,76 @@ public class View extends SurfaceView implements Runnable {
                     lost = true;
                 }
             }
-
-
-            // Incrementa el nivel de amenaza
-            // al hacer los sonidos más frecuentes
         }
 
-        if (lost) {
-            prepareLevel();
+
+        //La bala toca el tope superior de la pantalla
+        if(bala.isActivated() && bala.extrem()<=0){
+            bala.desactivar();
         }
 
-        // Actualiza las balas del jugador
 
-
-        // Actualiza todas las balas de los invaders si están activas
-
-
-        // Ha tocado la parte alta de la pantalla la bala del jugador
-
-
-        // Ha tocado la parte baja de la pantalla la bala del invader
+        //La bala toca el limite de abajo
+        for (int i = 0; i <maxInvaderMisile ; i++) {
+            if(invadersMisiles[i].extrem()>=screenY && invadersMisiles[i].isActivated()){
+                invadersMisiles[i].desactivar();
+            }
+        }
 
         // Ha tocado la bala del jugador a algún invader
+        if(bala.isActivated()){
+            for (int i = 0; i <numInvaders ; i++) {
+                if(invaders[i].isVisible() && RectF.intersects(invaders[i].getRectf(), bala.getRectf())){
+                    invaders[i].makeInvisible();
+                    bala.desactivar();
+                    score = score + 100;
+                }
+            }
+        }
+
+
 
 
         // Ha impactado una bala alienígena a un ladrillo de la guarida
+        for (int i = 0; i <maxInvaderMisile ; i++) {
+            if(invadersMisiles[i].isActivated()){
+                for (int j = 0; j <numBricks ; j++) {
+                    if(RectF.intersects(bricks[j].getRect(),invadersMisiles[i].getRectf()) && bricks[j].getVisibility()){
+                        bricks[j].setInvisible();
+                        invadersMisiles[i].desactivar();
+                    }
+                }
+            }
+        }
 
 
         // Ha impactado una bala del jugador a un ladrillo de la guarida
+        if(bala.isActivated()){
+            for (int i = 0; i <numBricks ; i++) {
+                if(bricks[i].getVisibility() && RectF.intersects(bricks[i].getRect(),bala.getRectf())){
+                    bala.desactivar();
+                }
+            }
+        }
 
         // Ha impactado una bala de un invader a la nave espacial del jugador
+
+        for (int i = 0; i <maxInvaderMisile ; i++) {
+            if(invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())){
+                paused=true;
+            }
+        }
+
+        //Ha impactado un marciano con un bloque
+        for (int i = 0; i <numInvaders ; i++) {
+            if(invaders[i].isVisible()){
+                for (int j = 0; j <numBricks ; j++) {
+                    if(bricks[j].getVisibility()){
+                        if(RectF.intersects(invaders[i].getRectf(), bricks[j].getRect()));
+                    }
+                }
+            }
+        }
 
 
     }
@@ -283,6 +333,11 @@ public class View extends SurfaceView implements Runnable {
             }
 
             // Actualiza todas las balas de los invaders si están activas
+            for (int i = 0; i <maxInvaderMisile ; i++) {
+                if(invadersMisiles[i].isActivated()){
+                     canvas.drawRect(invadersMisiles[i].getRectf(),paint);
+                }
+            }
 
             // Dibuja la puntuación y las vidas restantes
             // Cambia el color de la brocha
@@ -330,11 +385,8 @@ public class View extends SurfaceView implements Runnable {
 
                 paused = false;
                 if(motionEvent.getY() <= screenY/2) {
-                    if ((screenX / 3 < motionEvent.getX()) && (motionEvent.getX() <= (screenX / 3) * 2)) {
-                        //parte central de la pantalla
-                        bala.shoot(playerShip.getX(),playerShip.getY(),bala.UP);
+                    bala.shoot(playerShip.getX()+playerShip.getLength()/2,playerShip.getY(),bala.UP);
 
-                    }
                 }else {
                     //laterales de la pantalla
                     if (motionEvent.getX() <= (screenX / 3)) {

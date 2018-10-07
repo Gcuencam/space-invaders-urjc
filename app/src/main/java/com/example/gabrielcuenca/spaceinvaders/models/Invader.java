@@ -81,6 +81,10 @@ public class Invader {
         return yup;
     }
 
+    public RectF getRectf() {
+        return rectf;
+    }
+
     public void update(long fps, int screenX){
         if(direccion == LEFT){
             xleft = xleft - velocidad/fps;
@@ -106,10 +110,12 @@ public class Invader {
     }
 
     public boolean shoot(){
-        int random = (int) Math.random()*10 +1;
-         if(random==2 || random == 1){
-             return true;
-         }
-         return false;
+        int random = (int) Math.random()*5 +1;
+        if(random==1){
+            return true;
+        }else{
+            return false;
+        }
+
     }
 }
