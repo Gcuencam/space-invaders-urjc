@@ -7,10 +7,14 @@ public class Brick {
 
     private boolean isVisible;
 
+    private int numShelter;
+
     public Brick(int row, int column, int shelterNumber, int screenX, int screenY){
 
         int width = screenX / 90;
         int height = screenY / 40;
+
+        this.numShelter=shelterNumber;
 
         isVisible = true;
 
@@ -42,5 +46,9 @@ public class Brick {
 
     public boolean getVisibility(){
         return isVisible;
+    }
+
+    public int getNumShelter() {
+        return numShelter;
     }
 }

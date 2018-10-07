@@ -20,7 +20,7 @@
             android:name=".GameViewActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-        <activity android:name=".LoseActivity" />
+        <activity android:name=".EndActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -3,19 +3,19 @@ package com.example.gabrielcuenca.spaceinvaders.models;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Looper;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.example.gabrielcuenca.spaceinvaders.GameViewActivity;
-import com.example.gabrielcuenca.spaceinvaders.LoseActivity;
-import com.example.gabrielcuenca.spaceinvaders.WelcomeActivity;
+import com.example.gabrielcuenca.spaceinvaders.EndActivity;
+import com.example.gabrielcuenca.spaceinvaders.R;
 
 public class View extends SurfaceView implements Runnable {
 
@@ -23,6 +23,10 @@ public class View extends SurfaceView implements Runnable {
 
     // Esta es nuestra secuencia
     private Thread gameThread = null;
+
+    //Botón disparar
+    Bitmap buttonShoot;
+    Bitmap buttonShoot2;
 
     // Nuestro SurfaceHolder para bloquear la superficie antes de que dibujemos nuestros gráficos
     private SurfaceHolder ourHolder;
@@ -71,10 +75,16 @@ public class View extends SurfaceView implements Runnable {
 
     // La puntuación
     int score = 0;
+    int maxScore;
+    private final int VALUE_OF_INVADER = 100;
 
     Activity gameActivity;
 
     Boolean adult;
+
+    public int getNumInvaders(){
+        return this.numInvaders;
+    }
 
 
 
@@ -106,7 +116,18 @@ public class View extends SurfaceView implements Runnable {
 
     private void prepareLevel() {
 
-        // Aquí vamos a inicializar todos los objetos del juego
+        if(adult==true){
+            buttonShoot = BitmapFactory.decodeResource(context.getResources(), R.drawable.shoot_icon);
+            buttonShoot = Bitmap.createScaledBitmap(buttonShoot,
+                    (int) (screenX/15),
+                    (int) (screenY/10),
+                    false);
+            buttonShoot2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.shoot_icon);
+            buttonShoot2 = Bitmap.createScaledBitmap(buttonShoot,
+                    (int) (screenX/15),
+                    (int) (screenY/10),
+                    false);
+        }
 
         // Haz una nave espacial para un jugador nuevo
         playerShip = new Ship(context, screenX, screenY);
@@ -139,6 +160,7 @@ public class View extends SurfaceView implements Runnable {
                 }
             }
         }
+        maxScore=numInvaders*VALUE_OF_INVADER;
 
     }
 
@@ -254,7 +276,7 @@ public class View extends SurfaceView implements Runnable {
                 if(invaders[i].isVisible() && RectF.intersects(invaders[i].getRectf(), bala.getRectf())){
                     invaders[i].makeInvisible();
                     bala.desactivar();
-                    score = score + 100;
+                    score = score + VALUE_OF_INVADER;
                 }
             }
         }
@@ -288,23 +310,30 @@ public class View extends SurfaceView implements Runnable {
 
         for (int i = 0; i <maxInvaderMisile ; i++) {
             if(invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())){
-                paused=true;
-                Intent intent = new Intent(this.gameActivity, LoseActivity.class);
-                intent.putExtra("score",  Integer.toString(this.score));
-                this.gameActivity.startActivity(intent);
+                finDePartida();
             }
         }
 
         //Ha impactado un marciano con un bloque
+        int numBloque=-1;
         for (int i = 0; i <numInvaders ; i++) {
             if(invaders[i].isVisible()){
                 for (int j = 0; j <numBricks ; j++) {
-                    if(bricks[j].getVisibility()){
-                        if(RectF.intersects(invaders[i].getRectf(), bricks[j].getRect()));
+                    if(bricks[j].getVisibility() && RectF.intersects(invaders[i].getRectf(),bricks[j].getRect())){
+                        this.bricks[j].setInvisible();
+                        numBloque=this.bricks[j].getNumShelter();
+                    }
+                    if(bricks[j].getNumShelter()==numBloque){
+                        this.bricks[j].setInvisible();
                     }
                 }
             }
         }
+
+        if(score==maxScore){
+            finDePartida();
+        }
+
 
 
     }
@@ -341,6 +370,10 @@ public class View extends SurfaceView implements Runnable {
                 if(bricks[i].getVisibility()) {
                     canvas.drawRect(bricks[i].getRect(), paint);
                 }
+            }
+            if(adult){
+                canvas.drawBitmap(buttonShoot,0,(screenY/2)-100 , paint);
+                canvas.drawBitmap(buttonShoot2,screenX - screenX/15,(screenY/2)- 100, paint);
             }
 
 
@@ -401,9 +434,13 @@ public class View extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
 
                 paused = false;
-                if(motionEvent.getY() <= screenY/2 && this.adult) {
-                    bala.shoot(playerShip.getX()+playerShip.getLength()/2,playerShip.getY(),bala.UP);
-                }else {
+                if(motionEvent.getY()<=screenY/2 && (motionEvent.getX()<=screenX/15 || motionEvent.getX()>=screenX-screenX/15) &&
+                        motionEvent.getY()>=screenY/2 - screenY/10 ) {
+                    System.out.println("pimpam tructrucu");
+                    if(adult){
+                        bala.shoot(playerShip.getX()+playerShip.getLength()/2,playerShip.getY(),bala.UP);
+                    }
+                }else if(motionEvent.getY()>=screenY/2){
                     //laterales de la pantalla
                     if (motionEvent.getX() <= (screenX / 3)) {
                         //se mueve a la izq
@@ -423,6 +460,14 @@ public class View extends SurfaceView implements Runnable {
         }
 
         return true;
+    }
+
+    private void finDePartida(){
+        paused=true;
+        Intent intent = new Intent(this.gameActivity, EndActivity.class);
+        intent.putExtra("score",  Integer.toString(this.score));
+        intent.putExtra("maxScore", Integer.toString(this.maxScore));
+        this.gameActivity.startActivity(intent);
     }
 
 }
