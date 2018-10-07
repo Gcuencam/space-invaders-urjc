@@ -27,6 +27,8 @@ public class WelcomeActivity extends AppCompatActivity {
             startActivity(intent);
         }else{
             //opcion para niños
+            Intent intent = new Intent(WelcomeActivity.this, ChildGameViewActivity.class);
+            startActivity(intent);
         }
     }
 }

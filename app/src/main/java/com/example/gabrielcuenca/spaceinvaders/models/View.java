@@ -1,5 +1,6 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -71,14 +72,15 @@ public class View extends SurfaceView implements Runnable {
     // La puntuación
     int score = 0;
 
-    GameViewActivity gameActivity;
+    Activity gameActivity;
 
+    Boolean adult;
 
 
 
     // Cuando inicializamos (call new()) en gameView
     // Este método especial de constructor se ejecuta
-    public View(Context context, int x, int y, GameViewActivity gameActivity) {
+    public View(Context context, int x, int y, Activity gameActivity, Boolean adult) {
 
         // La siguiente línea del código le pide a
         // la clase de SurfaceView que prepare nuestro objeto.
@@ -96,6 +98,8 @@ public class View extends SurfaceView implements Runnable {
         screenY = y;
 
         this.gameActivity = gameActivity;
+
+        this.adult = adult;
 
         prepareLevel();
     }
@@ -119,6 +123,7 @@ public class View extends SurfaceView implements Runnable {
                 numInvaders++;
             }
         }
+
         // Inicializar la formación de invadersMisiles
         for (int i = 0; i < maxInvaderMisile; i++) {
             invadersMisiles[i]=new Misile(screenY);
@@ -184,7 +189,7 @@ public class View extends SurfaceView implements Runnable {
                     bumped=true;
                 }
             }
-            if(invaders[i].shoot()){
+            if(invaders[i].shoot() && this.adult){
                 if(invadersMisiles[nextMisile].shoot(invaders[i].getXleft()*2,
                         invaders[i].getY() + invaders[i].getHeight()*3,bala.DOWN)){
 
@@ -396,9 +401,8 @@ public class View extends SurfaceView implements Runnable {
             case MotionEvent.ACTION_DOWN:
 
                 paused = false;
-                if(motionEvent.getY() <= screenY/2) {
+                if(motionEvent.getY() <= screenY/2 && this.adult) {
                     bala.shoot(playerShip.getX()+playerShip.getLength()/2,playerShip.getY(),bala.UP);
-
                 }else {
                     //laterales de la pantalla
                     if (motionEvent.getX() <= (screenX / 3)) {

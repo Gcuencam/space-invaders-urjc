@@ -2,20 +2,14 @@ package com.example.gabrielcuenca.spaceinvaders;
 
 import android.app.Activity;
 import android.graphics.Point;
-import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Display;
 
 import com.example.gabrielcuenca.spaceinvaders.models.View;
 
-
-// SpaceInvadersActivity es el punto de entrada al juego.
-// Se va a encargar del ciclo de vida del juego al llamar
-// los métodos de spaceInvadersView cuando sean solicitados por el OS.
-
-public class GameViewActivity extends Activity {
-
+public class ChildGameViewActivity extends Activity
+{
     // spaceInvadersView será la visualización del juego
     // También tendrá la lógica del juego
     // y responderá a los toques a la pantalla
@@ -32,7 +26,7 @@ public class GameViewActivity extends Activity {
         display.getSize(size);
 
         // Inicializar gameView y establecerlo como la visualización
-        spaceInvadersView = new View(this, size.x, size.y, this, true);
+        spaceInvadersView = new View(this, size.x, size.y, this, false);
         setContentView(spaceInvadersView);
 
     }
