@@ -1,6 +1,7 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,6 +11,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import com.example.gabrielcuenca.spaceinvaders.GameViewActivity;
+import com.example.gabrielcuenca.spaceinvaders.LoseActivity;
+import com.example.gabrielcuenca.spaceinvaders.WelcomeActivity;
 
 public class View extends SurfaceView implements Runnable {
 
@@ -66,12 +71,14 @@ public class View extends SurfaceView implements Runnable {
     // La puntuación
     int score = 0;
 
+    GameViewActivity gameActivity;
+
 
 
 
     // Cuando inicializamos (call new()) en gameView
     // Este método especial de constructor se ejecuta
-    public View(Context context, int x, int y) {
+    public View(Context context, int x, int y, GameViewActivity gameActivity) {
 
         // La siguiente línea del código le pide a
         // la clase de SurfaceView que prepare nuestro objeto.
@@ -87,6 +94,8 @@ public class View extends SurfaceView implements Runnable {
 
         screenX = x;
         screenY = y;
+
+        this.gameActivity = gameActivity;
 
         prepareLevel();
     }
@@ -275,6 +284,9 @@ public class View extends SurfaceView implements Runnable {
         for (int i = 0; i <maxInvaderMisile ; i++) {
             if(invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())){
                 paused=true;
+                Intent intent = new Intent(this.gameActivity, LoseActivity.class);
+                intent.putExtra("score",  Integer.toString(this.score));
+                this.gameActivity.startActivity(intent);
             }
         }
 

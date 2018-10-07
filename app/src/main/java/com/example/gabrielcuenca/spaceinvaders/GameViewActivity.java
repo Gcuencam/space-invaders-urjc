@@ -32,7 +32,7 @@ public class GameViewActivity extends Activity {
         display.getSize(size);
 
         // Inicializar gameView y establecerlo como la visualización
-        spaceInvadersView = new View(this, size.x, size.y);
+        spaceInvadersView = new View(this, size.x, size.y, this);
         setContentView(spaceInvadersView);
 
     }

@@ -16,10 +16,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".GameViewActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:screenOrientation="landscape">
-        </activity>
+        <activity
+            android:name=".GameViewActivity"
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
+        <activity android:name=".LoseActivity"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
