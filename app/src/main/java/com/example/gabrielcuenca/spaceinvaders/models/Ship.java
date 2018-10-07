@@ -63,6 +63,10 @@ public class Ship {
         shipSpeed = 200;
     }
 
+    public float getHeight() {
+        return height;
+    }
+
     public RectF getRect(){
         return rect;
     }
