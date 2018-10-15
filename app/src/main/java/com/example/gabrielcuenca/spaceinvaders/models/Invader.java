@@ -19,6 +19,9 @@ public class Invader {
     private float width;
     private float height;
 
+    //Tiene color inicial?
+    private boolean colorIncial=true;
+
         //coordenada
     private float xleft; //esquina izquiera
     private float yup; //esquina superior
@@ -48,7 +51,7 @@ public class Invader {
 
         xleft = fila * (width + margen);
 
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.marcianito_invader);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.space_invader);
 
         velocidad = 100;
     }
@@ -117,5 +120,20 @@ public class Invader {
             return false;
         }
 
+    }
+
+    public void setImagen(Context context){
+        if(colorIncial){
+            bitmap = BitmapFactory.decodeResource(
+                    context.getResources(),
+                    R.drawable.invader_cambio);
+            colorIncial=false;
+        }else{
+
+            bitmap = BitmapFactory.decodeResource(
+                    context.getResources(),
+                    R.drawable.space_invader);
+            colorIncial=true;
+        }
     }
 }

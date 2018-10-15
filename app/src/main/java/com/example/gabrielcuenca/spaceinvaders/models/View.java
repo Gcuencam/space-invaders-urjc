@@ -291,6 +291,7 @@ public class View extends SurfaceView implements Runnable {
                     if(RectF.intersects(bricks[j].getRect(),invadersMisiles[i].getRectf()) && bricks[j].getVisibility()){
                         bricks[j].setInvisible();
                         invadersMisiles[i].desactivar();
+                        cambioColor();
                     }
                 }
             }
@@ -302,6 +303,7 @@ public class View extends SurfaceView implements Runnable {
             for (int i = 0; i <numBricks ; i++) {
                 if(bricks[i].getVisibility() && RectF.intersects(bricks[i].getRect(),bala.getRectf())){
                     bala.desactivar();
+                    cambioColor();
                 }
             }
         }
@@ -475,6 +477,13 @@ public class View extends SurfaceView implements Runnable {
         intent.putExtra("score",  Integer.toString(this.score));
         intent.putExtra("maxScore", Integer.toString(this.maxScore));
         this.gameActivity.startActivity(intent);
+    }
+
+    private void cambioColor(){
+        playerShip.setImagen(context);
+        for (int i = 0; i <invaders.length ; i++) {
+            invaders[i].setImagen(context);
+        }
     }
 
 }

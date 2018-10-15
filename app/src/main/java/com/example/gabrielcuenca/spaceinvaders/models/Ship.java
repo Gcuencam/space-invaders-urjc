@@ -10,6 +10,7 @@ import com.example.gabrielcuenca.spaceinvaders.R;
 public class Ship {
     RectF rect;
 
+
     // La nave espacial del jugador será representada por un Bitmap
     private Bitmap bitmap;
 
@@ -34,6 +35,9 @@ public class Ship {
     // Se esta moviendo la nave espacial y en que dirección
     private int shipMoving = STOPPED;
 
+    //La nave tiene el color inicial
+    private boolean colorInicial=true;
+
     // Cuando creamos un objeto de esta clase daremos
 // la anchura y la altura de la pantalla
     public Ship(Context context, int screenX, int screenY){
@@ -51,7 +55,7 @@ public class Ship {
         // Inicializa el bitmap
         bitmap = BitmapFactory.decodeResource(
                 context.getResources(),
-                R.drawable.ship8bitv3);
+                R.drawable.player_ship);
 
         // ajusta el bitmap a un tamaño proporcionado a la resolución de la pantalla
         bitmap = Bitmap.createScaledBitmap(bitmap,
@@ -119,6 +123,20 @@ public class Ship {
         rect.left = x;
         rect.right = x + length;
 
+    }
+
+    public void setImagen(Context context){
+        if(colorInicial){
+            bitmap = BitmapFactory.decodeResource(
+                    context.getResources(),
+                    R.drawable.ship_cambio);
+            colorInicial=false;
+        }else{
+            bitmap = BitmapFactory.decodeResource(
+                    context.getResources(),
+                    R.drawable.player_ship);
+            colorInicial=true;
+        }
     }
 
 }
