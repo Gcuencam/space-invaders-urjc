@@ -302,8 +302,8 @@ public class View extends SurfaceView implements Runnable {
         if(bala.isActivated()){
             for (int i = 0; i <numBricks ; i++) {
                 if(bricks[i].getVisibility() && RectF.intersects(bricks[i].getRect(),bala.getRectf())){
-                    bala.desactivar();
                     cambioColor();
+                    bala.desactivar();
                 }
             }
         }
@@ -481,7 +481,7 @@ public class View extends SurfaceView implements Runnable {
 
     private void cambioColor(){
         playerShip.setImagen(context);
-        for (int i = 0; i <invaders.length ; i++) {
+        for (int i = 0; i <numInvaders; i++) {
             invaders[i].setImagen(context);
         }
     }

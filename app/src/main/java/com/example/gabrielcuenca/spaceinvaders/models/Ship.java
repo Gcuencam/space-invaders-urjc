@@ -137,6 +137,10 @@ public class Ship {
                     R.drawable.player_ship);
             colorInicial=true;
         }
+        bitmap = Bitmap.createScaledBitmap(bitmap,
+                (int) (length),
+                (int) (height),
+                false);
     }
 
 }
