@@ -21,6 +21,9 @@ public class View extends SurfaceView implements Runnable {
 
     Context context;
 
+    //Cronómetro
+    private Chronometer time = new Chronometer();
+
     // Esta es nuestra secuencia
     private Thread gameThread = null;
 
@@ -135,6 +138,9 @@ public class View extends SurfaceView implements Runnable {
         // Preparar las balas del jugador
         bala = new Misile(screenY);
 
+        //Preparar el cronómetro
+        time=new Chronometer();
+
 
         // Construir un ejercito de invaders
         numInvaders = 0;
@@ -161,7 +167,7 @@ public class View extends SurfaceView implements Runnable {
             }
         }
         maxScore=numInvaders*VALUE_OF_INVADER;
-
+        time.start();
     }
 
     @Override
@@ -174,6 +180,7 @@ public class View extends SurfaceView implements Runnable {
             // Actualiza el cuadro
             if (!paused) {
                 update();
+                this.time.run();
             }
 
             // Dibuja el cuadro
@@ -230,6 +237,12 @@ public class View extends SurfaceView implements Runnable {
 
                 bumped = true;
             }
+        }
+
+        if(time.getSegundos()==10){
+            //Que aparezca un nuevo marciano
+            System.out.println("TIEEEEEEEEEMPOOOOOOOO");
+            time.reset();
         }
 
         if(lost){
