@@ -31,6 +31,8 @@ public class Ship {
     public final int STOPPED = 0;
     public final int LEFT = 1;
     public final int RIGHT = 2;
+    public final int UP = 3;
+    public final int DOWN = 4;
 
     // Se esta moviendo la nave espacial y en que dirección
     private int shipMoving = STOPPED;
@@ -115,6 +117,19 @@ public class Ship {
                 x = x + shipSpeed / fps;
             }
         }
+        if (shipMoving == UP){
+            if (y>0){
+                y = y - shipSpeed / fps;
+
+
+            }
+        }
+        if (shipMoving == DOWN){
+            if (y < height){
+                y = y + shipSpeed / fps;
+
+            }
+        }
 
 
         // Actualiza rect el cual es usado para detectar impactos
@@ -124,6 +139,7 @@ public class Ship {
         rect.right = x + length;
 
     }
+
 
     public void setImagen(Context context){
         if(colorInicial){

@@ -387,7 +387,7 @@ public class View extends SurfaceView implements Runnable {
             paint.setColor(Color.argb(255, 255, 255, 255));
 
             // Dibuja a la nave espacial del jugador
-            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX()+50, screenY - 150, paint);
+            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX()+50, playerShip.getY() - playerShip.getHeight(), paint);
             // Dibuja a los invaders
 
 
@@ -483,6 +483,14 @@ public class View extends SurfaceView implements Runnable {
                     } else if (((screenX / 3) * 2) < motionEvent.getX()) {
                         //se mueve a la dcha
                         playerShip.setShipMoving(playerShip.RIGHT);
+                    } else if (((screenX/3)<motionEvent.getX())&& (motionEvent.getX()<=((screenX/3)*2))){
+                        if (motionEvent.getY()<= (screenY*3/4)){
+                            //se mueve hacia arriba
+                            playerShip.setShipMoving(playerShip.UP);
+                        }else if (motionEvent.getY()>=(screenY*3/4)){
+                            //se mueve hacia abajo
+                            playerShip.setShipMoving(playerShip.DOWN);
+                        }
                     }
                 }
                 break;
