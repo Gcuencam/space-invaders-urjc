@@ -125,10 +125,10 @@ public class Ship {
             }
         }
         if (shipMoving == DOWN){
-            if (y < height){
+
                 y = y + shipSpeed / fps;
 
-            }
+            
         }
 
 
