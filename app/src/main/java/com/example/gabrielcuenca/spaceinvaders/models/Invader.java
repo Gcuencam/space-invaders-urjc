@@ -11,6 +11,8 @@ public class Invader {
 
     //region atributos
 
+    private boolean extra=false;
+
     private RectF rectf;
 
     private Bitmap bitmap;
@@ -55,6 +57,22 @@ public class Invader {
 
         velocidad = 100;
     }
+
+    public Invader(Context context, int x, int y, int pantallaY, int pantallaX, boolean extra){
+        rectf = new RectF();
+        width = pantallaX/15;
+        height = pantallaY/15;
+
+        isVisible = true;
+        yup = y;
+        xleft = x;
+
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.space_invader);
+
+        velocidad = 300;
+
+    }
+
 
     public void makeInvisible(){
         this.isVisible = false;

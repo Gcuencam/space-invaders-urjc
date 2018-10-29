@@ -72,6 +72,9 @@ public class View extends SurfaceView implements Runnable {
     Invader[] invaders = new Invader[maxInvaders];
     int numInvaders = 0;
 
+    //Invader cada 10s
+    private Invader invaderExtra;
+
     // Las guaridas del jugador están construidas a base de ladrillos
     private Brick[] bricks = new Brick[400];
     private int numBricks;
@@ -150,6 +153,11 @@ public class View extends SurfaceView implements Runnable {
                 numInvaders++;
             }
         }
+
+
+        invaderExtra=new Invader(context,0,0,screenX,screenY,true);
+        invaderExtra.makeInvisible();
+
 
         // Inicializar la formación de invadersMisiles
         for (int i = 0; i < maxInvaderMisile; i++) {
@@ -237,11 +245,16 @@ public class View extends SurfaceView implements Runnable {
 
                 bumped = true;
             }
+            if(invaderExtra.isVisible() && invaderExtra.getXleft()+invaderExtra.getWidth()==screenX){
+                invaderExtra= new Invader(context,0,0,screenX,screenY,true);
+                invaderExtra.makeInvisible();
+            }
+
         }
 
         if(time.getSegundos()==10){
             //Que aparezca un nuevo marciano
-            System.out.println("TIEEEEEEEEEMPOOOOOOOO");
+            invaderExtra.isVisible();
             time.reset();
         }
 
