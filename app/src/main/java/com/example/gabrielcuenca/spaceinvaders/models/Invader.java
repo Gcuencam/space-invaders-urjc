@@ -73,6 +73,7 @@ public class Invader {
 
     }
 
+    public void makeVisible(){ this.isVisible = true;}
 
     public void makeInvisible(){
         this.isVisible = false;
@@ -107,17 +108,20 @@ public class Invader {
     }
 
     public void update(long fps, int screenX){
-        if(direccion == LEFT){
-            xleft = xleft - velocidad/fps;
-        }else{
-            xleft = xleft + velocidad/fps;
+        if(isVisible) {
+
+            if (direccion == LEFT) {
+                xleft = xleft - velocidad / fps;
+            } else {
+                xleft = xleft + velocidad / fps;
+            }
+
+            rectf.left = xleft;
+            rectf.right = xleft + height;
+
+            rectf.top = yup;
+            rectf.bottom = yup + width;
         }
-
-        rectf.left = xleft;
-        rectf.right = xleft + height;
-
-        rectf.top = yup;
-        rectf.bottom = yup + width;
 
     }
 

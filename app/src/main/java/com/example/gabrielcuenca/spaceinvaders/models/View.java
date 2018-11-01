@@ -72,8 +72,10 @@ public class View extends SurfaceView implements Runnable {
     Invader[] invaders = new Invader[maxInvaders];
     int numInvaders = 0;
 
-    //Invader cada 10s
+    //Invader cada 10s y sus posicion inicial
     private Invader invaderExtra;
+    private int xInicialEx=0;
+    private int yInicialEx=0;
 
     // Las guaridas del jugador están construidas a base de ladrillos
     private Brick[] bricks = new Brick[400];
@@ -155,7 +157,7 @@ public class View extends SurfaceView implements Runnable {
         }
 
 
-        invaderExtra=new Invader(context,0,0,screenX,screenY,true);
+        invaderExtra=new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
         invaderExtra.makeInvisible();
 
 
@@ -245,16 +247,18 @@ public class View extends SurfaceView implements Runnable {
 
                 bumped = true;
             }
-            if(invaderExtra.isVisible() && invaderExtra.getXleft()+invaderExtra.getWidth()==screenX){
-                invaderExtra= new Invader(context,0,0,screenX,screenY,true);
-                invaderExtra.makeInvisible();
-            }
 
+        }
+    /**INVADER EXTRA UPDATE**/
+        invaderExtra.update(fps,screenX);
+        if(invaderExtra.getXleft()>=screenX){
+            invaderExtra=new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
+            invaderExtra.makeInvisible();
         }
 
         if(time.getSegundos()==10){
             //Que aparezca un nuevo marciano
-            invaderExtra.isVisible();
+            invaderExtra.makeVisible();
             time.reset();
         }
 
@@ -399,6 +403,9 @@ public class View extends SurfaceView implements Runnable {
                 if(invaders[i].isVisible()) {
                         canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
                 }
+            }
+            if(invaderExtra.isVisible()) {
+                canvas.drawBitmap(invaderExtra.getBitmap(), invaderExtra.getXleft(), invaderExtra.getY(), paint);
             }
             // Dibuja los ladrillos si están visibles
             for(int i = 0; i < numBricks; i++){
