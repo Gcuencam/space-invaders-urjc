@@ -159,4 +159,40 @@ public class Ship {
                 false);
     }
 
+
+    public void serImagenAleatoria(Context context){
+        int i= (int) (Math.random()*4);
+
+        switch (i){
+            case 0:
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.player_ship);
+                break;
+            case 1:
+
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.ship_cambiogris);
+                break;
+            case 2:
+
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.ship_cambio);
+                break;
+            case 3:
+
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.ship_cambioverde);
+                break;
+        }
+
+        bitmap = Bitmap.createScaledBitmap(bitmap,
+                (int) (length),
+                (int) (height),
+                false);
+    }
+
 }

@@ -315,13 +315,16 @@ public class View extends SurfaceView implements Runnable {
 
 
         // Ha impactado una bala alienígena a un ladrillo de la guarida
+        boolean impactoDoble=false;
+        boolean impacto=false;
         for (int i = 0; i <maxInvaderMisile ; i++) {
             if(invadersMisiles[i].isActivated()){
                 for (int j = 0; j <numBricks ; j++) {
                     if(RectF.intersects(bricks[j].getRect(),invadersMisiles[i].getRectf()) && bricks[j].getVisibility()){
+                        impactoDoble = true;
+                        impacto = true;
                         bricks[j].setInvisible();
                         invadersMisiles[i].desactivar();
-                        cambioColor();
                     }
                 }
             }
@@ -329,13 +332,22 @@ public class View extends SurfaceView implements Runnable {
 
 
         // Ha impactado una bala del jugador a un ladrillo de la guarida
+        impactoDoble=false;
         if(bala.isActivated()){
             for (int i = 0; i <numBricks ; i++) {
                 if(bricks[i].getVisibility() && RectF.intersects(bricks[i].getRect(),bala.getRectf())){
-                    cambioColor();
+                    impactoDoble = impactoDoble && true;
+                    impacto = !impactoDoble;
                     bala.desactivar();
                 }
             }
+        }
+
+
+        if(impactoDoble){
+            cambioColorAutomatico();
+        }else if(impacto){
+            cambioColor();
         }
 
         // Ha impactado una bala de un invader a la nave espacial del jugador
@@ -526,6 +538,15 @@ public class View extends SurfaceView implements Runnable {
         for (int i = 0; i <numInvaders; i++) {
             invaders[i].setImagen(context);
         }
+        invaderExtra.setImagen(context);
+    }
+
+    private void cambioColorAutomatico(){
+        playerShip.serImagenAleatoria(context);
+        for (int i = 0; i <numInvaders ; i++) {
+            invaders[i].setImagenAleatoria(context);
+        }
+        invaderExtra.setImagenAleatoria(context);
     }
 
 }

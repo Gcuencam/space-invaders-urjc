@@ -7,6 +7,8 @@ import android.graphics.RectF;
 
 import com.example.gabrielcuenca.spaceinvaders.R;
 
+import java.util.Random;
+
 public class Invader {
 
     //region atributos
@@ -156,6 +158,34 @@ public class Invader {
                     context.getResources(),
                     R.drawable.space_invader);
             colorIncial=true;
+        }
+    }
+
+    public void setImagenAleatoria(Context context){
+        int i = (int) (Math.random()*4);
+        switch (i){
+            case 0:
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.invader_cambio);
+                break;
+            case 1:
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.space_invader);
+                break;
+
+            case 2:
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.space_invaderazul);
+                break;
+            case 3:
+                bitmap = BitmapFactory.decodeResource(
+                        context.getResources(),
+                        R.drawable.space_invadernaranja);
+                break;
+
         }
     }
 }
