@@ -30,6 +30,7 @@ public class Misile {
 
     //CONSTRUCTOR
     public Misile(int screenY){
+
         this.width = 9;
         this.height = screenY / 20;
         this.rectf = new RectF();
