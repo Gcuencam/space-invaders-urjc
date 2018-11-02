@@ -41,7 +41,7 @@ public class Ship {
     private boolean colorInicial=true;
 
     // Cuando creamos un objeto de esta clase daremos
-// la anchura y la altura de la pantalla
+    // la anchura y la altura de la pantalla
     public Ship(Context context, int screenX, int screenY){
 
         // Inicializa un RectF vacío
@@ -103,8 +103,9 @@ public class Ship {
     }
 
     // Este método de update será llamado desde el update en SpaceInvadersView
-// Determina si la nave espacial del jugador necesita moverse y cambiar las coordenadas
-// que están en x si es necesario
+    // Determina si la nave espacial del jugador necesita moverse y cambiar las coordenadas
+    // que están en x si es necesario
+
     public void update(long fps){
         if(shipMoving == LEFT){
             if(x>0){

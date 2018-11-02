@@ -67,6 +67,7 @@ public class View extends SurfaceView implements Runnable {
     private int nextMisile =0;
     private int maxInvaderMisile = 1;
     private Misile[] invadersMisiles = new Misile[maxInvaderMisile];
+    private Misile[] misilInvaderExtra = new Misile[maxInvaderMisile];
 
     // Hasta 60 Invaders
     Invader[] invaders = new Invader[maxInvaders];
@@ -85,6 +86,7 @@ public class View extends SurfaceView implements Runnable {
     int score = 0;
     int maxScore;
     private final int VALUE_OF_INVADER = 100;
+    private final int VALUE_OF_INVADER_EXTRA = 500;
 
     Activity gameActivity;
 
@@ -241,6 +243,7 @@ public class View extends SurfaceView implements Runnable {
 
 
             }
+
             //Colisión
             if (invaders[i].getXleft() > screenX - invaders[i].getWidth()
                     || invaders[i].getXleft() < 0) {
@@ -276,6 +279,8 @@ public class View extends SurfaceView implements Runnable {
                 invadersMisiles[i].update(fps);
             }
         }
+
+
         // ¿Chocó algún invader en el extremo de la pantalla?
         if (bumped) {
             for (int i = 0; i <numInvaders ; i++) {
@@ -311,6 +316,16 @@ public class View extends SurfaceView implements Runnable {
             }
         }
 
+        //Ha tocado la bala del jugador al invader extra
+        if (bala.isActivated()){
+            for (int i = 0; i<numInvaders; i++){
+                if (invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), bala.getRectf())){
+                    invaderExtra.makeInvisible();
+                    bala.desactivar();
+                    score = score + VALUE_OF_INVADER_EXTRA;
+                }
+            }
+        }
 
 
 
