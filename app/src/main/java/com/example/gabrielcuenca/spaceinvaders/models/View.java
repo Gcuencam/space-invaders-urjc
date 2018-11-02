@@ -84,7 +84,6 @@ public class View extends SurfaceView implements Runnable {
 
     // La puntuación
     int score = 0;
-    int maxScore;
     private final int VALUE_OF_INVADER = 100;
     private final int VALUE_OF_INVADER_EXTRA = 500;
 
@@ -125,6 +124,7 @@ public class View extends SurfaceView implements Runnable {
     }
 
     private void prepareLevel() {
+
 
         if(adult==true){
             buttonShoot = BitmapFactory.decodeResource(context.getResources(), R.drawable.shoot_icon);
@@ -178,7 +178,6 @@ public class View extends SurfaceView implements Runnable {
                 }
             }
         }
-        maxScore=numInvaders*VALUE_OF_INVADER;
         time.start();
     }
 
@@ -271,6 +270,21 @@ public class View extends SurfaceView implements Runnable {
 
         if(bala.isActivated()){
             bala.update(fps);
+        }
+
+        int countInvaders=0;
+
+        for (int i = 0; i <numInvaders ; i++) {
+            if(invaders[i].isVisible()){
+                countInvaders++;
+                if(invaders[i].getY() >= screenY - playerShip.getLength()){
+                    finDePartida();
+                }
+            }
+        }
+
+        if(countInvaders==0){
+            finDePartida();
         }
 
         // Actualiza a todas las balas de los invaders si están activas
@@ -386,17 +400,6 @@ public class View extends SurfaceView implements Runnable {
                     }
                 }
             }
-        }
-        for (int i = 0; i <numInvaders ; i++) {
-            if(invaders[i].isVisible()){
-                if(invaders[i].getY() >= screenY - playerShip.getLength()){
-                    finDePartida();
-                }
-            }
-        }
-
-        if(score==maxScore){
-            finDePartida();
         }
 
 
@@ -543,7 +546,6 @@ public class View extends SurfaceView implements Runnable {
         paused=true;
         Intent intent = new Intent(this.gameActivity, EndActivity.class);
         intent.putExtra("score",  Integer.toString(this.score));
-        intent.putExtra("maxScore", Integer.toString(this.maxScore));
         this.gameActivity.startActivity(intent);
     }
 
