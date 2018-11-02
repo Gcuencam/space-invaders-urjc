@@ -15,8 +15,8 @@ public class Misile {
 
     //DIRECCION
     private int direccion = -1; //no se mueve
-    public final int UP = 1;
-    public final int DOWN = 0;
+    static int UP = 1;
+    static int DOWN = 0;
     private float speed = 400;
 
     //¿Está activate?
@@ -65,6 +65,14 @@ public class Misile {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public void cambiarADireccionOpuesta(){
+        if (direccion == DOWN){ //Dirección DOWN (=0)
+            direccion = UP;
+        }else{ //Dirección UP (=1)
+            direccion = DOWN;
+        }
     }
 
     //Te devuelve donde está el extremo de la bala que va a chocar

@@ -58,16 +58,20 @@ public class View extends SurfaceView implements Runnable {
     // La nave del jugador
     private Ship playerShip;
 
-    // La bala del jugador
-    private Misile bala;
+    // Las balas del jugador
+    private int nextMisilJugador =0;
+    private int maxJugadorMisiles = 10;
+    private Misile[] jugadorMisiles = new Misile[maxJugadorMisiles];
+
 
     private int maxInvaders=60;
 
     // Las balas de los Invaders
     private int nextMisile =0;
-    private int maxInvaderMisile = 1;
+    private int maxInvaderMisile = 5;
     private Misile[] invadersMisiles = new Misile[maxInvaderMisile];
     private Misile[] misilInvaderExtra = new Misile[maxInvaderMisile];
+
 
     // Hasta 60 Invaders
     Invader[] invaders = new Invader[maxInvaders];
@@ -143,7 +147,10 @@ public class View extends SurfaceView implements Runnable {
         playerShip = new Ship(context, screenX, screenY);
 
         // Preparar las balas del jugador
-        bala = new Misile(screenY);
+        for (int i = 0; i < maxJugadorMisiles; i++) {
+            jugadorMisiles[i]=new Misile(screenY);
+        }
+
 
         //Preparar el cronómetro
         time=new Chronometer();
@@ -231,10 +238,11 @@ public class View extends SurfaceView implements Runnable {
                 }
             }
             if(invaders[i].shoot() && this.adult){
+                //Si la bala 'invadersMisiles[nextMisile]' no ha sido disparada se dispara
                 if(invadersMisiles[nextMisile].shoot(invaders[i].getXleft()*2,
-                        invaders[i].getY() + invaders[i].getHeight()*3,bala.DOWN)){
+                        invaders[i].getY() + invaders[i].getHeight()*3,Misile.DOWN)){
 
-                    if(nextMisile==maxInvaderMisile-1){
+                    if(nextMisile == maxInvaderMisile-1){
                         nextMisile=0;
                     }else{
                         nextMisile++;
@@ -269,8 +277,11 @@ public class View extends SurfaceView implements Runnable {
             pause();
         }
 
-        if(bala.isActivated()){
-            bala.update(fps);
+        // Actualiza a todas las balas del jugador si están activas
+        for(int i=0; i < maxJugadorMisiles; i++){
+            if(jugadorMisiles[i].isActivated()){
+            jugadorMisiles[i].update(fps);
+            }
         }
 
         // Actualiza a todas las balas de los invaders si están activas
@@ -292,38 +303,76 @@ public class View extends SurfaceView implements Runnable {
         }
 
 
-        //La bala toca el tope superior de la pantalla
-        if(bala.isActivated() && bala.extrem()<=0){
-            bala.desactivar();
+        //Las balas tocan el tope superior de la pantalla
+        for(int i = 0; i < maxJugadorMisiles; i++) {
+            if (jugadorMisiles[i].isActivated() && jugadorMisiles[i].extrem() <= 0) {
+                //bala.desactivar();
+                jugadorMisiles[i].cambiarADireccionOpuesta();
+            }
         }
-
-
-        //La bala toca el limite de abajo
         for (int i = 0; i <maxInvaderMisile ; i++) {
-            if(invadersMisiles[i].extrem()>=screenY && invadersMisiles[i].isActivated()){
-                invadersMisiles[i].desactivar();
+            if(invadersMisiles[i].extrem() <= 0 && invadersMisiles[i].isActivated()){
+                //invadersMisiles[i].desactivar();
+                invadersMisiles[i].cambiarADireccionOpuesta();
             }
         }
 
-        // Ha tocado la bala del jugador a algún invader
-        if(bala.isActivated()){
-            for (int i = 0; i <numInvaders ; i++) {
-                if(invaders[i].isVisible() && RectF.intersects(invaders[i].getRectf(), bala.getRectf())){
-                    invaders[i].makeInvisible();
-                    bala.desactivar();
+        //Las balas tocan el limite de abajo
+        for(int i = 0; i < maxJugadorMisiles; i++) {
+            if (jugadorMisiles[i].isActivated() && jugadorMisiles[i].extrem() >= screenY) {
+                //bala.desactivar();
+                jugadorMisiles[i].cambiarADireccionOpuesta();
+            }
+        }
+        for (int i = 0; i <maxInvaderMisile ; i++) {
+            if(invadersMisiles[i].extrem()>= screenY && invadersMisiles[i].isActivated()){
+                //invadersMisiles[i].desactivar();
+                invadersMisiles[i].cambiarADireccionOpuesta();
+            }
+        }
+
+        // Ha tocado alguna bala a algún invader
+        for (int i = 0; i < maxJugadorMisiles ; i++) {
+            if (jugadorMisiles[i].isActivated()) {
+                for (int j = 0; j < numInvaders; j++) {
+                    if (invaders[j].isVisible() && RectF.intersects(invaders[j].getRectf(), jugadorMisiles[i].getRectf())) {
+                        invaders[j].makeInvisible();
+                        jugadorMisiles[i].desactivar();
+                        score = score + VALUE_OF_INVADER;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < maxInvaderMisile ; i++) {
+            for (int j = 0; j < numInvaders; j++) {
+                if (invaders[j].isVisible() && RectF.intersects(invaders[j].getRectf(), invadersMisiles[i].getRectf())) {
+                    invaders[j].makeInvisible();
+                    invadersMisiles[i].desactivar();
                     score = score + VALUE_OF_INVADER;
                 }
             }
         }
 
-        //Ha tocado la bala del jugador al invader extra
-        if (bala.isActivated()){
-                if (invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), bala.getRectf())){
-                    invaderExtra = new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
+        //Ha tocado alguna bala al invader extra
+        for (int i = 0; i < maxJugadorMisiles ; i++) {
+            if (jugadorMisiles[i].isActivated()) {
+                if (invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), jugadorMisiles[i].getRectf())) {
+                    invaderExtra = new Invader(context, xInicialEx, yInicialEx, screenX, screenY, true);
                     invaderExtra.makeInvisible();
-                    bala.desactivar();
+                    jugadorMisiles[i].desactivar();
                     score = score + VALUE_OF_INVADER_EXTRA;
                 }
+            }
+        }
+        for (int i = 0; i < maxInvaderMisile ; i++) {
+            if (invadersMisiles[i].isActivated()) {
+                if (invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), invadersMisiles[i].getRectf())) {
+                    invaderExtra = new Invader(context, xInicialEx, yInicialEx, screenX, screenY, true);
+                    invaderExtra.makeInvisible();
+                    invadersMisiles[i].desactivar();
+                    score = score + VALUE_OF_INVADER_EXTRA;
+                }
+            }
         }
 
 
@@ -347,12 +396,14 @@ public class View extends SurfaceView implements Runnable {
 
         // Ha impactado una bala del jugador a un ladrillo de la guarida
         impactoDoble=false;
-        if(bala.isActivated()){
-            for (int i = 0; i <numBricks ; i++) {
-                if(bricks[i].getVisibility() && RectF.intersects(bricks[i].getRect(),bala.getRectf())){
-                    impactoDoble = impactoDoble && true;
-                    impacto = !impactoDoble;
-                    bala.desactivar();
+        for (int i = 0; i < maxJugadorMisiles ; i++) {
+            if (jugadorMisiles[i].isActivated()) {
+                for (int j = 0; j < numBricks; j++) {
+                    if (bricks[j].getVisibility() && RectF.intersects(bricks[j].getRect(), jugadorMisiles[i].getRectf())) {
+                        impactoDoble = impactoDoble && true;
+                        impacto = !impactoDoble;
+                        jugadorMisiles[i].desactivar();
+                    }
                 }
             }
         }
@@ -364,10 +415,15 @@ public class View extends SurfaceView implements Runnable {
             cambioColor();
         }
 
-        // Ha impactado una bala de un invader a la nave espacial del jugador
+        // Ha impactado una bala a la nave espacial del jugador
 
-        for (int i = 0; i <maxInvaderMisile ; i++) {
+        for (int i = 0; i < maxInvaderMisile ; i++) {
             if(invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())){
+                finDePartida();
+            }
+        }
+        for (int i = 0; i < maxJugadorMisiles ; i++) {
+            if(jugadorMisiles[i].isActivated() && RectF.intersects(jugadorMisiles[i].getRectf(), playerShip.getRect())){
                 finDePartida();
             }
         }
@@ -446,8 +502,10 @@ public class View extends SurfaceView implements Runnable {
 
 
             // Dibuja a las balas del jugador si están activas
-            if(bala.isActivated()) {
-                canvas.drawRect(bala.getRectf(), paint);
+            for (int i=0; i < maxJugadorMisiles; i++ ) {
+                if (jugadorMisiles[i].isActivated()) {
+                    canvas.drawRect(jugadorMisiles[i].getRectf(), paint);
+                }
             }
 
             // Actualiza todas las balas de los invaders si están activas
@@ -506,7 +564,16 @@ public class View extends SurfaceView implements Runnable {
                         motionEvent.getY()>=screenY/2 - screenY/10 ) {
                     System.out.println("pimpam tructrucu");
                     if(adult){
-                        bala.shoot(playerShip.getX()+playerShip.getLength()/2,playerShip.getY(),bala.UP);
+
+                        if(jugadorMisiles[nextMisilJugador].shoot(playerShip.getX()+playerShip.getLength(),
+                                playerShip.getY()-playerShip.getHeight()/2,Misile.UP)){
+
+                            if(nextMisilJugador == maxJugadorMisiles-1){
+                                nextMisilJugador=0;
+                            }else{
+                                nextMisilJugador++;
+                            }
+                        }
                     }
                 }else if(motionEvent.getY()>=screenY/2){
                     //laterales de la pantalla
