@@ -318,13 +318,12 @@ public class View extends SurfaceView implements Runnable {
 
         //Ha tocado la bala del jugador al invader extra
         if (bala.isActivated()){
-            for (int i = 0; i<numInvaders; i++){
                 if (invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), bala.getRectf())){
+                    invaderExtra = new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
                     invaderExtra.makeInvisible();
                     bala.desactivar();
                     score = score + VALUE_OF_INVADER_EXTRA;
                 }
-            }
         }
 
 

@@ -1,8 +1,5 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
-import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Chronometer extends Thread {
 
