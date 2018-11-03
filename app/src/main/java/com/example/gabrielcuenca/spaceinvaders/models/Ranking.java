@@ -9,27 +9,28 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-public class Ranking {
+public final class Ranking {
 
-    private Map<Integer, String> ranking = new TreeMap<Integer, String>(java.util.Collections.reverseOrder());
+    private static Map<Integer, String> ranking = new TreeMap<Integer, String>(java.util.Collections.reverseOrder());
+    public static String userName;
 
     public Ranking() {
 
     }
 
-    public Map<Integer, String> getRanking() {
+    public static Map<Integer, String> getRanking() {
         return ranking;
     }
 
-    public void addScore(int score, String nick) {
-        this.ranking.put(score, nick);
+    public void addScore(int score) {
+        this.ranking.put(score, Ranking.userName);
         this.save();
     }
 
-    private void save() {
+    private static void save() {
         Properties properties = new Properties();
 
-        for (Map.Entry<Integer,String> entry : this.ranking.entrySet()) {
+        for (Map.Entry<Integer,String> entry : ranking.entrySet()) {
             properties.put(entry.getKey(), entry.getValue());
         }
 
@@ -40,7 +41,7 @@ public class Ranking {
         }
     }
 
-    public void load() {
+    public static void load() {
         Properties properties = new Properties();
         try {
             properties.load(new FileInputStream("ranking.properties"));
@@ -49,7 +50,7 @@ public class Ranking {
         }
 
         for (String key : properties.stringPropertyNames()) {
-            this.ranking.put(Integer.valueOf(key), properties.get(key).toString());
+            ranking.put(Integer.valueOf(key), properties.get(key).toString());
         }
     }
 }

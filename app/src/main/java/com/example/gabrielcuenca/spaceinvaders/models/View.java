@@ -88,13 +88,14 @@ public class View extends SurfaceView implements Runnable {
 
     // La puntuación
     int score = 0;
-    int maxScore;
     private final int VALUE_OF_INVADER = 100;
     private final int VALUE_OF_INVADER_EXTRA = 500;
 
     Activity gameActivity;
 
     Boolean adult;
+
+    private boolean win=true;
 
     public int getNumInvaders(){
         return this.numInvaders;
@@ -110,6 +111,8 @@ public class View extends SurfaceView implements Runnable {
         // la clase de SurfaceView que prepare nuestro objeto.
         // !Que amable¡.
         super(context);
+
+        win=false;
 
         // Hace una copia del "context" disponible globalmete para que la usemos en otro método
         this.context = context;
@@ -129,6 +132,7 @@ public class View extends SurfaceView implements Runnable {
     }
 
     private void prepareLevel() {
+
 
         if(adult==true){
             buttonShoot = BitmapFactory.decodeResource(context.getResources(), R.drawable.shoot_icon);
@@ -185,7 +189,6 @@ public class View extends SurfaceView implements Runnable {
                 }
             }
         }
-        maxScore=numInvaders*VALUE_OF_INVADER;
         time.start();
     }
 
@@ -260,7 +263,7 @@ public class View extends SurfaceView implements Runnable {
             }
 
         }
-    /**INVADER EXTRA UPDATE**/
+        /**INVADER EXTRA UPDATE**/
         invaderExtra.update(fps,screenX);
         if(invaderExtra.getXleft()>=screenX){
             invaderExtra=new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
@@ -282,6 +285,22 @@ public class View extends SurfaceView implements Runnable {
             if(jugadorMisiles[i].isActivated()){
             jugadorMisiles[i].update(fps);
             }
+        }
+
+        int countInvaders=0;
+
+        for (int i = 0; i <numInvaders ; i++) {
+            if(invaders[i].isVisible()){
+                countInvaders++;
+                if(invaders[i].getY() >= screenY - playerShip.getLength()){
+                    finDePartida();
+                }
+            }
+        }
+
+        if(countInvaders==0){
+            win=true;
+            finDePartida();
         }
 
         // Actualiza a todas las balas de los invaders si están activas
@@ -420,6 +439,7 @@ public class View extends SurfaceView implements Runnable {
         for (int i = 0; i < maxInvaderMisile ; i++) {
             if(invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())){
                 finDePartida();
+
             }
         }
         for (int i = 0; i < maxJugadorMisiles ; i++) {
@@ -442,17 +462,6 @@ public class View extends SurfaceView implements Runnable {
                     }
                 }
             }
-        }
-        for (int i = 0; i <numInvaders ; i++) {
-            if(invaders[i].isVisible()){
-                if(invaders[i].getY() >= screenY - playerShip.getLength()){
-                    finDePartida();
-                }
-            }
-        }
-
-        if(score==maxScore){
-            finDePartida();
         }
 
 
@@ -483,7 +492,7 @@ public class View extends SurfaceView implements Runnable {
 
             for(int i = 0; i < numInvaders; i++){
                 if(invaders[i].isVisible()) {
-                        canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
+                    canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
                 }
             }
             if(invaderExtra.isVisible()) {
@@ -502,16 +511,20 @@ public class View extends SurfaceView implements Runnable {
 
 
             // Dibuja a las balas del jugador si están activas
+
             for (int i=0; i < maxJugadorMisiles; i++ ) {
                 if (jugadorMisiles[i].isActivated()) {
-                    canvas.drawRect(jugadorMisiles[i].getRectf(), paint);
+                    RectF rect = jugadorMisiles[i].getRectf();
+                    rect.right += 45;
+                    rect.left += 45;
+                    canvas.drawRect(rect, paint);
                 }
             }
 
             // Actualiza todas las balas de los invaders si están activas
             for (int i = 0; i <maxInvaderMisile ; i++) {
                 if(invadersMisiles[i].isActivated()){
-                     canvas.drawRect(invadersMisiles[i].getRectf(),paint);
+                    canvas.drawRect(invadersMisiles[i].getRectf(),paint);
                 }
             }
 
@@ -610,7 +623,11 @@ public class View extends SurfaceView implements Runnable {
         paused=true;
         Intent intent = new Intent(this.gameActivity, EndActivity.class);
         intent.putExtra("score",  Integer.toString(this.score));
-        intent.putExtra("maxScore", Integer.toString(this.maxScore));
+        String winner="loser";
+        if(win){
+            winner="winner";
+        }
+        intent.putExtra("win",winner );
         this.gameActivity.startActivity(intent);
     }
 
