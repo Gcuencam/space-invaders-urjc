@@ -91,6 +91,8 @@ public class View extends SurfaceView implements Runnable {
 
     Boolean adult;
 
+    private boolean win=true;
+
     public int getNumInvaders(){
         return this.numInvaders;
     }
@@ -105,6 +107,8 @@ public class View extends SurfaceView implements Runnable {
         // la clase de SurfaceView que prepare nuestro objeto.
         // !Que amable¡.
         super(context);
+
+        win=false;
 
         // Hace una copia del "context" disponible globalmete para que la usemos en otro método
         this.context = context;
@@ -284,6 +288,7 @@ public class View extends SurfaceView implements Runnable {
         }
 
         if(countInvaders==0){
+            win=true;
             finDePartida();
         }
 
@@ -383,6 +388,7 @@ public class View extends SurfaceView implements Runnable {
         for (int i = 0; i <maxInvaderMisile ; i++) {
             if(invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())){
                 finDePartida();
+
             }
         }
 
@@ -546,6 +552,11 @@ public class View extends SurfaceView implements Runnable {
         paused=true;
         Intent intent = new Intent(this.gameActivity, EndActivity.class);
         intent.putExtra("score",  Integer.toString(this.score));
+        String winner="loser";
+        if(win){
+            winner="winner";
+        }
+        intent.putExtra("win",winner );
         this.gameActivity.startActivity(intent);
     }
 

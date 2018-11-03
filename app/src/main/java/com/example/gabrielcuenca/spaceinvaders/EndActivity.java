@@ -8,7 +8,7 @@ import android.widget.TextView;
 public class EndActivity extends AppCompatActivity {
 
     String score;
-    int maxScore;
+    String win;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +17,11 @@ public class EndActivity extends AppCompatActivity {
 
         Intent intent = getIntent(); // gets the previously created intent
         this.score = intent.getStringExtra("score");
-        this.maxScore = Integer.parseInt(intent.getStringExtra("maxScore"));
+        this.win= intent.getStringExtra("win");
 
         int n=Integer.parseInt(score);
 
-        if(n==maxScore){
+        if(win.equals("winner")){
             TextView ganar = findViewById(R.id.estadoText);
             ganar.setText("WIN");
         }
