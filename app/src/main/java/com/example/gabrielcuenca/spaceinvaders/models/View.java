@@ -395,7 +395,6 @@ public class View extends SurfaceView implements Runnable {
         }
 
 
-
         // Ha impactado una bala alienígena a un ladrillo de la guarida
         boolean impactoDoble=false;
         boolean impacto=false;
