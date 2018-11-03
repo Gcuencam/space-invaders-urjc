@@ -12,6 +12,7 @@ import java.util.TreeMap;
 public final class Ranking {
 
     private static Map<Integer, String> ranking = new TreeMap<Integer, String>(java.util.Collections.reverseOrder());
+    public static String userName;
 
     public Ranking() {
 
@@ -21,8 +22,8 @@ public final class Ranking {
         return ranking;
     }
 
-    public void addScore(int score, String nick) {
-        this.ranking.put(score, nick);
+    public void addScore(int score) {
+        this.ranking.put(score, Ranking.userName);
         this.save();
     }
 
