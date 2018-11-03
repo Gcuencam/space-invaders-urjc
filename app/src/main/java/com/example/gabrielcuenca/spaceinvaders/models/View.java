@@ -255,7 +255,7 @@ public class View extends SurfaceView implements Runnable {
             }
 
         }
-    /**INVADER EXTRA UPDATE**/
+        /**INVADER EXTRA UPDATE**/
         invaderExtra.update(fps,screenX);
         if(invaderExtra.getXleft()>=screenX){
             invaderExtra=new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
@@ -337,12 +337,12 @@ public class View extends SurfaceView implements Runnable {
 
         //Ha tocado la bala del jugador al invader extra
         if (bala.isActivated()){
-                if (invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), bala.getRectf())){
-                    invaderExtra = new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
-                    invaderExtra.makeInvisible();
-                    bala.desactivar();
-                    score = score + VALUE_OF_INVADER_EXTRA;
-                }
+            if (invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), bala.getRectf())){
+                invaderExtra = new Invader(context,xInicialEx,yInicialEx,screenX,screenY,true);
+                invaderExtra.makeInvisible();
+                bala.desactivar();
+                score = score + VALUE_OF_INVADER_EXTRA;
+            }
         }
 
 
@@ -436,7 +436,7 @@ public class View extends SurfaceView implements Runnable {
 
             for(int i = 0; i < numInvaders; i++){
                 if(invaders[i].isVisible()) {
-                        canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
+                    canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
                 }
             }
             if(invaderExtra.isVisible()) {
@@ -456,13 +456,16 @@ public class View extends SurfaceView implements Runnable {
 
             // Dibuja a las balas del jugador si están activas
             if(bala.isActivated()) {
-                canvas.drawRect(bala.getRectf(), paint);
+                RectF rect = bala.getRectf();
+                rect.right += 45;
+                rect.left += 45;
+                canvas.drawRect(rect, paint);
             }
 
             // Actualiza todas las balas de los invaders si están activas
             for (int i = 0; i <maxInvaderMisile ; i++) {
                 if(invadersMisiles[i].isActivated()){
-                     canvas.drawRect(invadersMisiles[i].getRectf(),paint);
+                    canvas.drawRect(invadersMisiles[i].getRectf(),paint);
                 }
             }
 
