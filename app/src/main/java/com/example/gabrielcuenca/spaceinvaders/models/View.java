@@ -498,7 +498,7 @@ public class View extends SurfaceView implements Runnable {
 
             for(int i = 0; i < numInvaders; i++){
                 if(invaders[i].isVisible()) {
-                    canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
+                    //canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
                 }
             }
             if(invaderExtra.isVisible()) {
@@ -521,8 +521,8 @@ public class View extends SurfaceView implements Runnable {
             for (int i=0; i < maxJugadorMisiles; i++ ) {
                 if (jugadorMisiles[i].isActivated()) {
                     RectF rect = jugadorMisiles[i].getRectf();
-                    rect.right += 45;
-                    rect.left += 45;
+                    rect.right -= 13;
+                    rect.left -= 13;
                     canvas.drawRect(rect, paint);
                 }
             }
