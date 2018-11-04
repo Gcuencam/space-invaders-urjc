@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.widget.CheckBox;
 
 import com.example.gabrielcuenca.spaceinvaders.models.View;
 
@@ -33,7 +34,9 @@ public class GameViewActivity extends Activity {
 
         // Inicializar gameView y establecerlo como la visualización
         String name = getIntent().getExtras().getString("userName");
-        spaceInvadersView = new View(this, size.x, size.y, this, true,name);
+
+        boolean proMode = getIntent().getExtras().getBoolean("proMode");
+        spaceInvadersView = new View(this, size.x, size.y, this, true,name,proMode);
         setContentView(spaceInvadersView);
 
     }

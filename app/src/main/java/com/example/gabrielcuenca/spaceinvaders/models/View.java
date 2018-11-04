@@ -71,7 +71,7 @@ public class View extends SurfaceView implements Runnable {
 
     // Las balas de los Invaders
     private int nextMisile =0;
-    private int maxInvaderMisile = 10;
+    private int maxInvaderMisile = 7;
     private Misile[] invadersMisiles = new Misile[maxInvaderMisile];
     private Misile[] misilInvaderExtra = new Misile[maxInvaderMisile];
 
@@ -97,6 +97,7 @@ public class View extends SurfaceView implements Runnable {
     Activity gameActivity;
 
     Boolean adult;
+    private boolean pro;
 
     private boolean win=true;
 
@@ -108,7 +109,7 @@ public class View extends SurfaceView implements Runnable {
 
     // Cuando inicializamos (call new()) en gameView
     // Este método especial de constructor se ejecuta
-    public View(Context context, int x, int y, Activity gameActivity, Boolean adult, String username) {
+    public View(Context context, int x, int y, Activity gameActivity, Boolean adult, String username, boolean pro) {
 
         // La siguiente línea del código le pide a
         // la clase de SurfaceView que prepare nuestro objeto.
@@ -116,6 +117,8 @@ public class View extends SurfaceView implements Runnable {
         super(context);
 
         win=false;
+
+        this.pro=pro;
 
 
         ranking = new Ranking(context,username);
@@ -332,28 +335,41 @@ public class View extends SurfaceView implements Runnable {
         //Las balas tocan el tope superior de la pantalla
         for(int i = 0; i < maxJugadorMisiles; i++) {
             if (jugadorMisiles[i].isActivated() && jugadorMisiles[i].extrem() <= 0) {
-                //bala.desactivar();
-                jugadorMisiles[i].cambiarADireccionOpuesta();
+                if(pro){
+                    jugadorMisiles[i].cambiarADireccionOpuesta();
+                }else{
+                    jugadorMisiles[i].desactivar();
+                }
             }
         }
         for (int i = 0; i <maxInvaderMisile ; i++) {
             if(invadersMisiles[i].extrem() <= 0 && invadersMisiles[i].isActivated()){
-                //invadersMisiles[i].desactivar();
-                invadersMisiles[i].cambiarADireccionOpuesta();
+                if(pro){
+                    invadersMisiles[i].cambiarADireccionOpuesta();
+                }else{
+                    invadersMisiles[i].desactivar();
+                }
             }
         }
 
         //Las balas tocan el limite de abajo
         for(int i = 0; i < maxJugadorMisiles; i++) {
             if (jugadorMisiles[i].isActivated() && jugadorMisiles[i].extrem() >= screenY) {
-                //bala.desactivar();
-                jugadorMisiles[i].cambiarADireccionOpuesta();
+                if(pro){
+
+                    jugadorMisiles[i].cambiarADireccionOpuesta();
+                }else{
+                    jugadorMisiles[i].desactivar();
+                }
             }
         }
         for (int i = 0; i <maxInvaderMisile ; i++) {
             if(invadersMisiles[i].extrem()>= screenY && invadersMisiles[i].isActivated()){
-                //invadersMisiles[i].desactivar();
-                invadersMisiles[i].cambiarADireccionOpuesta();
+                if(pro){
+                    invadersMisiles[i].cambiarADireccionOpuesta();
+                }else{
+                    invadersMisiles[i].desactivar();
+                }
             }
         }
 

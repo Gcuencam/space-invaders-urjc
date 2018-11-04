@@ -26,7 +26,7 @@ public class ChildGameViewActivity extends Activity
         display.getSize(size);
 
         // Inicializar gameView y establecerlo como la visualización
-        spaceInvadersView = new View(this, size.x, size.y, this, false,"child");
+        spaceInvadersView = new View(this, size.x, size.y, this, false,"child",false);
         setContentView(spaceInvadersView);
 
     }

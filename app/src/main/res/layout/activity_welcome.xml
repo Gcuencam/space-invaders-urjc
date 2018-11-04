@@ -76,4 +76,21 @@
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary" />
     </android.support.design.widget.TextInputLayout>
+
+    <CheckBox
+        android:id="@+id/checkPro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="31dp"
+        android:layout_marginEnd="55dp"
+        android:layout_marginBottom="40dp"
+        android:buttonTint="@android:color/background_light"
+        android:text="Pro level, are you ready?"
+        android:textColor="@android:color/background_light"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/ButtonPlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/checkEdad" />
 </android.support.constraint.ConstraintLayout>

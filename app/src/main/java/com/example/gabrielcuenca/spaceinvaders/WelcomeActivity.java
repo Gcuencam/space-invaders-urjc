@@ -31,10 +31,12 @@ public class WelcomeActivity extends AppCompatActivity {
         String name = this.nameInput.getText().toString();
 
         CheckBox age = findViewById(R.id.checkEdad);
+        CheckBox pro = findViewById(R.id.checkPro);
         if(age.isChecked()){
             //opcion para adultos
             Intent intent = new Intent(WelcomeActivity.this, GameViewActivity.class);
             intent.putExtra("userName", name);
+            intent.putExtra("proMode", pro.isChecked());
             startActivity(intent);
         }else{
             //opcion para niños
