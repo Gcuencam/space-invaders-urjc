@@ -406,14 +406,13 @@ public class View extends SurfaceView implements Runnable {
 
 
         // Ha impactado una bala alienígena a un ladrillo de la guarida
-        boolean impactoDoble=false;
-        boolean impacto=false;
+
+        int contadorImpactos=0;
         for (int i = 0; i <maxInvaderMisile ; i++) {
             if(invadersMisiles[i].isActivated()){
                 for (int j = 0; j <numBricks ; j++) {
                     if(RectF.intersects(bricks[j].getRect(),invadersMisiles[i].getRectf()) && bricks[j].getVisibility()){
-                        impactoDoble = true;
-                        impacto = true;
+                        contadorImpactos++;
                         bricks[j].setInvisible();
                         invadersMisiles[i].desactivar();
                     }
@@ -423,23 +422,24 @@ public class View extends SurfaceView implements Runnable {
 
 
         // Ha impactado una bala del jugador a un ladrillo de la guarida
-        impactoDoble=false;
         for (int i = 0; i < maxJugadorMisiles ; i++) {
             if (jugadorMisiles[i].isActivated()) {
                 for (int j = 0; j < numBricks; j++) {
                     if (bricks[j].getVisibility() && RectF.intersects(bricks[j].getRect(), jugadorMisiles[i].getRectf())) {
+                        contadorImpactos++;
                         jugadorMisiles[i].desactivar();
                     }
                 }
             }
         }
 
-
-        if(impactoDoble){
-            cambioColorAutomatico();
-        }else if(impacto){
+        if(contadorImpactos==1){
             cambioColor();
+        }else if(contadorImpactos>1){
+            cambioColorAutomatico();
         }
+
+
 
         // Ha impactado una bala a la nave espacial del jugador
 
