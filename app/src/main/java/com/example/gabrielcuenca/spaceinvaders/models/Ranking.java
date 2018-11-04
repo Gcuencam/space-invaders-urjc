@@ -22,9 +22,9 @@ public final class Ranking {
         return ranking;
     }
 
-    public void addScore(int score) {
-        this.ranking.put(score, Ranking.userName);
-        this.save();
+    public static void addScore(int score) {
+        ranking.put(score, Ranking.userName);
+        save();
     }
 
     private static void save() {

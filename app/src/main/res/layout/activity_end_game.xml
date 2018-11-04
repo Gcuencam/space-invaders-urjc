@@ -75,4 +75,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <Button
+        android:id="@+id/buttonRanking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="selectRanking"
+        android:text="Ver Ranking"
+        android:textColor="@color/colorPrimary"
+        tools:backgroundTint="@android:color/background_dark"
+        tools:layout_editor_absoluteX="29dp"
+        tools:layout_editor_absoluteY="423dp" />
+
 </android.support.constraint.ConstraintLayout>

@@ -560,6 +560,7 @@ public class View extends SurfaceView implements Runnable {
             winner="winner";
         }
         intent.putExtra("win",winner );
+        Ranking.addScore(score);
         this.gameActivity.startActivity(intent);
     }
 
