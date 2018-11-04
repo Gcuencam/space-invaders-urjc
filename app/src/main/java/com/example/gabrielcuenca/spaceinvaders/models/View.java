@@ -242,6 +242,13 @@ public class View extends SurfaceView implements Runnable {
         // Mueve la nave espacial del jugador
         playerShip.update(fps);
 
+        //Ha impactado la nave con la barrera
+        for (int i = 0; i<numBricks; i++){
+            if(bricks[i].getVisibility() && RectF.intersects(playerShip.getRect(),bricks[i].getRect())){
+                finDePartida();
+            }
+        }
+
         // Actualiza a los invaders si se ven
         for (int i = 0; i <numInvaders ; i++) {
             if(invaders[i].isVisible()){
@@ -491,12 +498,6 @@ public class View extends SurfaceView implements Runnable {
                 if (RectF.intersects(playerShip.getRect(),invaders[i].getRectf())) {
                     finDePartida();
                 }
-            }
-        }
-        //Ha impactado la nave con la barrera
-        for (int i = 0; i<numBricks; i++){
-            if(bricks[i].getVisibility() && RectF.intersects(playerShip.getRect(),bricks[i].getRect())){
-                finDePartida();
             }
         }
 

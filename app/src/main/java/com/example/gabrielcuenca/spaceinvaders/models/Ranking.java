@@ -35,7 +35,7 @@ public class Ranking {
             BufferedReader fin =
                     new BufferedReader(
                             new InputStreamReader(
-                                    context.openFileInput("points.txt")));
+                                    context.openFileInput("zariguella.txt")));
             lineaAleer = fin.readLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,7 +44,7 @@ public class Ranking {
 
             OutputStreamWriter fout =
                     new OutputStreamWriter(
-                            context.openFileOutput("points.txt", Context.MODE_PRIVATE));
+                            context.openFileOutput("zariguella.txt", Context.MODE_PRIVATE));
 
             if (lineaAleer != null)
                 fout.write(lineaAleer + "" + userName + ":" + score + "pts");
@@ -62,7 +62,7 @@ public class Ranking {
             BufferedReader fin =
                     new BufferedReader(
                             new InputStreamReader(
-                                    context.openFileInput("points.txt")));
+                                    context.openFileInput("zariguella.txt")));
             String lineaActual;
             while ((lineaActual = fin.readLine()) != null) {
                 System.out.println(lineaActual);
@@ -84,7 +84,7 @@ public class Ranking {
         }
         String[] array = new String[puntuaciones.size()];
         Collections.sort(puntuaciones);
-        for (int i = 0; i < (puntuaciones.size()) || (i<10); i++) {
+        for (int i = 0; i < (puntuaciones.size()) && (i<10); i++) {
             array[i] = puntuaciones.get(i).getName() + ": " +puntuaciones.get(i).getScore();
         }
 
