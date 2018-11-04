@@ -365,9 +365,12 @@ public class View extends SurfaceView implements Runnable {
         for (int i = 0; i < maxInvaderMisile ; i++) {
             for (int j = 0; j < numInvaders; j++) {
                 if (invaders[j].isVisible() && RectF.intersects(invaders[j].getRectf(), invadersMisiles[i].getRectf())) {
-                    invaders[j].makeInvisible();
-                    invadersMisiles[i].desactivar();
-                    score = score + VALUE_OF_INVADER;
+                    if(invadersMisiles[i].direccion==Misile.UP){
+
+                        invaders[j].makeInvisible();
+                        invadersMisiles[i].desactivar();
+                        score = score + VALUE_OF_INVADER;
+                    }
                 }
             }
         }
@@ -418,8 +421,6 @@ public class View extends SurfaceView implements Runnable {
             if (jugadorMisiles[i].isActivated()) {
                 for (int j = 0; j < numBricks; j++) {
                     if (bricks[j].getVisibility() && RectF.intersects(bricks[j].getRect(), jugadorMisiles[i].getRectf())) {
-                        impactoDoble = impactoDoble && true;
-                        impacto = !impactoDoble;
                         jugadorMisiles[i].desactivar();
                     }
                 }
@@ -451,7 +452,7 @@ public class View extends SurfaceView implements Runnable {
 
             }
         }
-        //Ha impactado un marciano con un bloque o con el marciano
+        //Ha impactado un marciano con un bloque o con el jugador
         int numBloque=-1;
         for (int i = 0; i <numInvaders ; i++) {
             if(invaders[i].isVisible()){
