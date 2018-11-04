@@ -29,17 +29,17 @@ public class WelcomeActivity extends AppCompatActivity {
 
     public void initGame(View view) {
         String name = this.nameInput.getText().toString();
-        Ranking.userName = name;
 
         CheckBox age = findViewById(R.id.checkEdad);
         if(age.isChecked()){
             //opcion para adultos
             Intent intent = new Intent(WelcomeActivity.this, GameViewActivity.class);
+            intent.putExtra("userName", name);
             startActivity(intent);
         }else{
             //opcion para niños
-            Intent intent = new Intent(WelcomeActivity.this, ChildGameViewActivity.class);
-            startActivity(intent);
+            Intent intent2 = new Intent(WelcomeActivity.this, ChildGameViewActivity.class);
+            startActivity(intent2);
         }
     }
 }
