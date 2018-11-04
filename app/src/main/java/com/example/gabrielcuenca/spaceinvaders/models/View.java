@@ -499,7 +499,7 @@ public class View extends SurfaceView implements Runnable {
 
             for(int i = 0; i < numInvaders; i++){
                 if(invaders[i].isVisible()) {
-                    //canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
+                    canvas.drawBitmap(invaders[i].getBitmap(), invaders[i].getXleft(), invaders[i].getY(), paint);
                 }
             }
             if(invaderExtra.isVisible()) {
