@@ -24,6 +24,9 @@ public class View extends SurfaceView implements Runnable {
     //Cronómetro
     private Chronometer time = new Chronometer();
 
+    //Ranking
+    public Ranking ranking;
+
     // Esta es nuestra secuencia
     private Thread gameThread = null;
 
@@ -105,7 +108,7 @@ public class View extends SurfaceView implements Runnable {
 
     // Cuando inicializamos (call new()) en gameView
     // Este método especial de constructor se ejecuta
-    public View(Context context, int x, int y, Activity gameActivity, Boolean adult) {
+    public View(Context context, int x, int y, Activity gameActivity, Boolean adult, String username) {
 
         // La siguiente línea del código le pide a
         // la clase de SurfaceView que prepare nuestro objeto.
@@ -113,6 +116,9 @@ public class View extends SurfaceView implements Runnable {
         super(context);
 
         win=false;
+
+
+        ranking = new Ranking(context,username);
 
         // Hace una copia del "context" disponible globalmete para que la usemos en otro método
         this.context = context;
@@ -132,6 +138,7 @@ public class View extends SurfaceView implements Runnable {
     }
 
     private void prepareLevel() {
+
 
 
         if(adult==true){
@@ -635,7 +642,8 @@ public class View extends SurfaceView implements Runnable {
             winner="winner";
         }
         intent.putExtra("win",winner );
-        Ranking.addScore(score);
+        intent.putExtra("user", ranking.userName);
+        ranking.save(score);
         this.gameActivity.startActivity(intent);
     }
 
@@ -654,5 +662,6 @@ public class View extends SurfaceView implements Runnable {
         }
         invaderExtra.setImagenAleatoria(context);
     }
+
 
 }

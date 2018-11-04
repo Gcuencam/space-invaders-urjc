@@ -32,7 +32,8 @@ public class GameViewActivity extends Activity {
         display.getSize(size);
 
         // Inicializar gameView y establecerlo como la visualización
-        spaceInvadersView = new View(this, size.x, size.y, this, true);
+        String name = getIntent().getExtras().getString("userName");
+        spaceInvadersView = new View(this, size.x, size.y, this, true,name);
         setContentView(spaceInvadersView);
 
     }

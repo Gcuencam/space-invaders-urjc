@@ -11,6 +11,7 @@ import android.view.View;
 public class EndActivity extends AppCompatActivity {
 
     String score;
+    String userName;
     String win;
 
     @Override
@@ -21,6 +22,7 @@ public class EndActivity extends AppCompatActivity {
         Intent intent = getIntent(); // gets the previously created intent
         this.score = intent.getStringExtra("score");
         this.win= intent.getStringExtra("win");
+        this.userName = intent.getStringExtra("user");
 
         int n=Integer.parseInt(score);
 
@@ -34,6 +36,7 @@ public class EndActivity extends AppCompatActivity {
 
     public void selectRanking (View view){
         Intent intent = new Intent(EndActivity.this, RankingActivity.class);
+        intent.putExtra("user",userName);
         startActivity(intent);
     }
 
