@@ -14,9 +14,9 @@ public class Misile {
     private RectF rectf;
 
     //DIRECCION
-    private int direccion = -1; //no se mueve
-    static int UP = 1;
-    static int DOWN = 0;
+    public int direccion = -1; //no se mueve
+    public static int UP = 1;
+    public static int DOWN = 0;
     private float speed = 400;
 
     //¿Está activate?
