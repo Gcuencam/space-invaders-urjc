@@ -446,7 +446,11 @@ public class View extends SurfaceView implements Runnable {
                 finDePartida();
             }
         }
+        for(int i = 0; i<numInvaders;i++) {
+            if (invaders[i].isVisible()) {
 
+            }
+        }
         //Ha impactado un marciano con un bloque o con el marciano
         int numBloque=-1;
         for (int i = 0; i <numInvaders ; i++) {
@@ -459,6 +463,9 @@ public class View extends SurfaceView implements Runnable {
                     if(bricks[j].getNumShelter()==numBloque){
                         this.bricks[j].setInvisible();
                     }
+                }
+                if (RectF.intersects(playerShip.getRect(),invaders[i].getRectf())) {
+                    finDePartida();
                 }
             }
         }
@@ -627,6 +634,7 @@ public class View extends SurfaceView implements Runnable {
             winner="winner";
         }
         intent.putExtra("win",winner );
+        Ranking.addScore(score);
         this.gameActivity.startActivity(intent);
     }
 

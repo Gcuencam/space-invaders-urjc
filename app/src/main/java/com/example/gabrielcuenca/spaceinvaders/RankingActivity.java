@@ -21,9 +21,12 @@ public class RankingActivity extends AppCompatActivity {
         TextView rankingList = (TextView) findViewById(R.id.listRankingView);
 
         for (Iterator i = keysRanking.iterator(); i.hasNext(); ) {
-            String key = (String) i.next();
-            String value = (String) Ranking.getRanking().get(key);
-            rankingList.setText(key + " : " + value);
+            String key = i.next().toString();
+            System.out.println("KEy: " + key);
+            String value = Ranking.getRanking().get(Integer.parseInt(key));
+            System.out.println("valor: " + value +  " key:" + key);
+            String cadena = value + " : " + key;
+            rankingList.setText(cadena);
         }
 
         setContentView(R.layout.activity_ranking);
