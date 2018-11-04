@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.gabrielcuenca.spaceinvaders.models.Ranking;
-import com.example.gabrielcuenca.spaceinvaders.models.View;
+import android.view.View;
 
 public class EndActivity extends AppCompatActivity {
 
@@ -36,4 +36,5 @@ public class EndActivity extends AppCompatActivity {
         Intent intent = new Intent(EndActivity.this, RankingActivity.class);
         startActivity(intent);
     }
+
 }
