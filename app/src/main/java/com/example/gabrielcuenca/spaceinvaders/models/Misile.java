@@ -90,11 +90,9 @@ public class Misile {
             setY(coordenadaY);
             this.direccion=dir;
             activar();
-            return true;
-        }else{
-            return false;
-            //ya está disparando
         }
+        return true;
+
     }
 
     public void update(long fps){
