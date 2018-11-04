@@ -17,7 +17,7 @@ public class Misile {
     public int direccion = -1; //no se mueve
     public static int UP = 1;
     public static int DOWN = 0;
-    private float speed = 400;
+    private float speed = 300;
 
     //¿Está activate?
     private boolean activate = false;

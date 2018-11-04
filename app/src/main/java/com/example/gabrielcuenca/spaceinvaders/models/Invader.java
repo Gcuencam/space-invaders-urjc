@@ -137,7 +137,8 @@ public class Invader {
     }
 
     public boolean shoot(){
-        int random = (int) Math.random()*1;
+        Random generator = new Random();
+        int random = generator.nextInt(9);
         if(random==1){
             return true;
         }else{

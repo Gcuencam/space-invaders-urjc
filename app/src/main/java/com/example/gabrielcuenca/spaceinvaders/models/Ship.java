@@ -135,9 +135,9 @@ public class Ship {
 
         // Actualiza rect el cual es usado para detectar impactos
         rect.top = y;
-        rect.bottom = y + height;
+        rect.bottom = y + height-2;
         rect.left = x;
-        rect.right = x + length;
+        rect.right = x + length-2;
 
     }
 

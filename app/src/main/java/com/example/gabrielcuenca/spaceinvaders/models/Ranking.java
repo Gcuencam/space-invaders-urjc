@@ -84,7 +84,7 @@ public class Ranking {
         }
         String[] array = new String[puntuaciones.size()];
         Collections.sort(puntuaciones);
-        for (int i = 0; i < puntuaciones.size(); i++) {
+        for (int i = 0; i < (puntuaciones.size()) || (i<10); i++) {
             array[i] = puntuaciones.get(i).getName() + ": " +puntuaciones.get(i).getScore();
         }
 
