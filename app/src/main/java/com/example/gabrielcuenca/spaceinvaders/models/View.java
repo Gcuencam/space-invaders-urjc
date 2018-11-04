@@ -63,7 +63,7 @@ public class View extends SurfaceView implements Runnable {
 
     // Las balas del jugador
     private int nextMisilJugador =0;
-    private int maxJugadorMisiles = 10;
+    private int maxJugadorMisiles = 7;
     private Misile[] jugadorMisiles = new Misile[maxJugadorMisiles];
 
 
@@ -71,7 +71,7 @@ public class View extends SurfaceView implements Runnable {
 
     // Las balas de los Invaders
     private int nextMisile =0;
-    private int maxInvaderMisile = 5;
+    private int maxInvaderMisile = 10;
     private Misile[] invadersMisiles = new Misile[maxInvaderMisile];
     private Misile[] misilInvaderExtra = new Misile[maxInvaderMisile];
 

@@ -11,14 +11,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-import java.util.TreeMap;
+import java.util.Collections;
 
 public class Ranking {
 
-    public ArrayList<Integer> puntuaciones = new ArrayList<>();
+    public ArrayList<Score> puntuaciones = new ArrayList<>();
     public  String userName;
     public Context context;
 
@@ -38,7 +35,7 @@ public class Ranking {
             BufferedReader fin =
                     new BufferedReader(
                             new InputStreamReader(
-                                    context.openFileInput("nueva_puntuacion2.txt")));
+                                    context.openFileInput("points.txt")));
             lineaAleer = fin.readLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,12 +44,12 @@ public class Ranking {
 
             OutputStreamWriter fout =
                     new OutputStreamWriter(
-                            context.openFileOutput("nueva_puntuacion.txt", Context.MODE_PRIVATE));
+                            context.openFileOutput("points.txt", Context.MODE_PRIVATE));
 
             if (lineaAleer != null)
-                fout.write(lineaAleer + "" + userName + "¬" + score + "#");
+                fout.write(lineaAleer + "" + userName + ":" + score + "pts");
             else
-                fout.write(userName + "¬" + score + "#");
+                fout.write(userName + ": " + score + "pts");
             fout.close();
 
         } catch (Exception ex) {
@@ -65,29 +62,30 @@ public class Ranking {
             BufferedReader fin =
                     new BufferedReader(
                             new InputStreamReader(
-                                    context.openFileInput("nueva_puntuacion.txt")));
+                                    context.openFileInput("points.txt")));
             String lineaActual;
             while ((lineaActual = fin.readLine()) != null) {
                 System.out.println(lineaActual);
-                String[] puntuacioneGuardadas = lineaActual.split("#");
+                String[] puntuacioneGuardadas = lineaActual.split("pts");
                 for (int i = 0; i < puntuacioneGuardadas.length; i++) {
-                    String[] datosPuntuacion = puntuacioneGuardadas[i].split("¬");
+                    String[] datosPuntuacion = puntuacioneGuardadas[i].split(":");
                     System.out.println(datosPuntuacion[0] + "-" + datosPuntuacion[1]);
-                    puntuaciones.add(Integer.parseInt(datosPuntuacion[1]));
+                    puntuaciones.add(new Score(Integer.parseInt(datosPuntuacion[1].trim()),datosPuntuacion[0]));
                 }
+
             }
             fin.close();
 
-            Log.i("Ficheros", "Fichero leido!");
+            Log.i("Ficheros", "Todo bien, todo correcto");
         } catch (FileNotFoundException e) {
-            Log.i("Ficheros", "Fichero no leido!");
+            Log.i("Ficheros", "El fichero no está");
         } catch (IOException e) {
-            Log.i("Ficheros", "ALGO PASA!");
+            Log.i("Ficheros", "RIP");
         }
         String[] array = new String[puntuaciones.size()];
-        int contador = 0;
+        Collections.sort(puntuaciones);
         for (int i = 0; i < puntuaciones.size(); i++) {
-            array[i] = userName+": "+puntuaciones.get(i);
+            array[i] = puntuaciones.get(i).getName() + ": " +puntuaciones.get(i).getScore();
         }
 
 

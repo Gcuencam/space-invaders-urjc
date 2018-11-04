@@ -66,7 +66,7 @@ public class Ship {
                 false);
 
         // Qué tan rápido va la nave espacial en pixeles por segundo
-        shipSpeed = 200;
+        shipSpeed = 300;
     }
 
     public float getHeight() {
