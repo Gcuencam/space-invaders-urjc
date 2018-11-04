@@ -477,7 +477,12 @@ public class View extends SurfaceView implements Runnable {
                 }
             }
         }
-
+        //Ha impactado la nave con la barrera
+        for (int i = 0; i<numBricks; i++){
+            if(bricks[i].getVisibility() && RectF.intersects(playerShip.getRect(),bricks[i].getRect())){
+                finDePartida();
+            }
+        }
 
 
     }
