@@ -22,7 +22,7 @@ public class RankingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ranking);
+        setContentView(R.layout.ranking_activity);
         this.userName =getIntent().getStringExtra("user");
         ranking = new Ranking(this,userName);
 
@@ -34,7 +34,7 @@ public class RankingActivity extends AppCompatActivity {
 
         ArrayAdapter adapter = new ArrayAdapter<String>(this,
                 R.layout.activity_filas, valores);
-        ListView listView = (ListView) findViewById(R.id.listView);
+        ListView listView = (ListView) findViewById(R.id.Dinamismo);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -44,7 +44,5 @@ public class RankingActivity extends AppCompatActivity {
                 System.out.println(valores[position]);
             }
         });
-
-        setContentView(R.layout.activity_ranking);
     }
 }
