@@ -265,8 +265,8 @@ public class View extends SurfaceView implements Runnable {
             }
             if (invaders[i].shoot() && this.adult && invaders[i].isVisible()) {
                 //Si la bala 'invadersMisiles[nextMisileInvader]' no ha sido disparada se dispara
-                if (invadersMisiles[nextMisileInvader].shoot(invaders[i].getXleft() * 2,
-                        invaders[i].getY() + invaders[i].getHeight() * 3, Misile.DOWN)) {
+                if (invadersMisiles[nextMisileInvader].shoot(invaders[i].getXleft()+invaders[i].getWidth(),
+                        invaders[i].getY() + invaders[i].getHeight(), Misile.DOWN)) {
 
                     if (nextMisileInvader == maxInvaderMisile - 1) {
                         nextMisileInvader = 0;
