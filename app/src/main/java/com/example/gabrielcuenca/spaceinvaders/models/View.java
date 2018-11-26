@@ -62,15 +62,15 @@ public class View extends SurfaceView implements Runnable {
     private Ship playerShip;
 
     // Las balas del jugador
-    private int nextMisilJugador = 0;
-    private int maxJugadorMisiles = 7;
-    private Misile[] jugadorMisiles = new Misile[maxJugadorMisiles];
+    private int nextMisileShip = 0;
+    private int maxShipMisiles = 7;
+    private Misile[] shipMisiles = new Misile[maxShipMisiles];
 
 
     private int maxInvaders = 60;
 
     // Las balas de los Invaders
-    private int nextMisile = 0;
+    private int nextMisileInvader = 0;
     private int maxInvaderMisile = 7;
     private Misile[] invadersMisiles = new Misile[maxInvaderMisile];
     private Misile[] misilInvaderExtra = new Misile[maxInvaderMisile];
@@ -160,8 +160,8 @@ public class View extends SurfaceView implements Runnable {
         playerShip = new Ship(context, screenX, screenY);
 
         // Preparar las balas del jugador
-        for (int i = 0; i < maxJugadorMisiles; i++) {
-            jugadorMisiles[i] = new Misile(screenY);
+        for (int i = 0; i < maxShipMisiles; i++) {
+            shipMisiles[i] = new Misile(screenY);
         }
 
 
@@ -258,20 +258,20 @@ public class View extends SurfaceView implements Runnable {
             }
         }
 
-        /** ***** UPDATE DEL MOVIMIENTO DEL JUGADOR ****** **/
+        /** ***** UPDATE DEL MOVIMIENTO DE LOS INVADERS ****** **/
         for (int i = 0; i < numInvaders; i++) {
             if (invaders[i].isVisible()) {
                 invaders[i].update(fps, screenX);
             }
             if (invaders[i].shoot() && this.adult && invaders[i].isVisible()) {
-                //Si la bala 'invadersMisiles[nextMisile]' no ha sido disparada se dispara
-                if (invadersMisiles[nextMisile].shoot(invaders[i].getXleft() * 2,
+                //Si la bala 'invadersMisiles[nextMisileInvader]' no ha sido disparada se dispara
+                if (invadersMisiles[nextMisileInvader].shoot(invaders[i].getXleft() * 2,
                         invaders[i].getY() + invaders[i].getHeight() * 3, Misile.DOWN)) {
 
-                    if (nextMisile == maxInvaderMisile - 1) {
-                        nextMisile = 0;
+                    if (nextMisileInvader == maxInvaderMisile - 1) {
+                        nextMisileInvader = 0;
                     } else {
-                        nextMisile++;
+                        nextMisileInvader++;
                     }
                 }
 
@@ -296,135 +296,22 @@ public class View extends SurfaceView implements Runnable {
 
         /** UPDATE DEL MOVIMIENTO DEL INVADER EXTRA **/
         invaderExtra.update(fps, screenX);
-        if (invaderExtra.getXleft() >= screenX) {
+        if (invaderExtra.getXleft() >= screenX) { //ha llegado al final de la pantalla
             invaderExtra = new Invader(context, xInicialEx, yInicialEx, screenX, screenY, true);
             invaderExtra.makeInvisible();
         }
 
-        if (time.getSegundos() == 10) {
+        if (time.getSeconds() == 10) {
             //Que aparezca un nuevo marciano
             invaderExtra.makeVisible();
             time.reset();
         }
 
-        /** ****** UPDATE BALAS DEL JUGADOR ****** **/
-        for (int i = 0; i < maxJugadorMisiles; i++) {
-            if (jugadorMisiles[i].isActivated()) {
-                jugadorMisiles[i].update(fps);
-                if (jugadorMisiles[i].extrem() >= screenY || jugadorMisiles[i].extrem() <= 0) {
-                    if (pro) {
-                        jugadorMisiles[i].cambiarADireccionOpuesta();
-                    } else {
-                        jugadorMisiles[i].desactivar();
-                    }
-                }
-            }
-        }
-
-        /** ***** UPDATE BALAS DE LOS INVADERS **** **/
-        for (int i = 0; i < maxInvaderMisile; i++) {
-            if (invadersMisiles[i].isActivated()) {
-                invadersMisiles[i].update(fps);
-                if (invadersMisiles[i].extrem() >= screenY || invadersMisiles[i].extrem() <= 0) {
-                    if (pro) {
-                        invadersMisiles[i].cambiarADireccionOpuesta();
-                    } else {
-                        invadersMisiles[i].desactivar();
-                    }
-                }
-            }
-        }
-
-        int contadorImpactos = 0; //Para el cambio de color
-
-        /** *********COLISIONES DE LAS BALAS DEL JUGADOR********** **/
-        for (int i = 0; i < maxJugadorMisiles; i++) {
-            //Colision con la nave del jugador
-            if (jugadorMisiles[i].isActivated() && pro) {
-                if (RectF.intersects(jugadorMisiles[i].getRectf(), playerShip.getRect())) {
-                    jugadorMisiles[i].desactivar();
-                    finDePartida();
-                }
-            }
-            //Colision con algún invader
-            if (jugadorMisiles[i].isActivated()) {
-                for (int j = 0; j < numInvaders; j++) {
-                    if (invaders[j].isVisible() && RectF.intersects(invaders[j].getRectf(), jugadorMisiles[i].getRectf())) {
-                        invaders[j].makeInvisible();
-                        numInvadersVisibles--;
-                        jugadorMisiles[i].desactivar();
-                        score = score + VALUE_OF_INVADER;
-                    }
-                }
-            }
-            //Colision con el invader extra
-            if (jugadorMisiles[i].isActivated() &&
-                    invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), jugadorMisiles[i].getRectf())) {
-                invaderExtra = new Invader(context, xInicialEx, yInicialEx, screenX, screenY, true);
-                invaderExtra.makeInvisible();
-                jugadorMisiles[i].desactivar();
-                score = score + VALUE_OF_INVADER_EXTRA;
-            }
-            //Colision con la barrera
-            if (jugadorMisiles[i].isActivated()) {
-
-                for (int j = 0; j < numBricks; j++) {
-                    if (bricks[j].getVisibility() && RectF.intersects(bricks[j].getRect(), jugadorMisiles[i].getRectf())) {
-                        contadorImpactos++;
-                        jugadorMisiles[i].desactivar();
-                    }
-                }
-            }
-        }
-
-        /** **********COLISIONES DE LAS BALAS DE LOS INVADERS*********** **/
-        for (int i = 0; i < maxInvaderMisile; i++) {
-            if (invadersMisiles[i].isActivated()) {
-                //Colision con la nave del jugador
-                if (invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())) {
-                    finDePartida();
-                }
-            }
-            //Colision con la con algún invader
-            if (invadersMisiles[i].isActivated() && pro) {
-                for (int j = 0; j < numInvaders; j++) {
-                    if (invaders[j].isVisible() && RectF.intersects(invaders[j].getRectf(), invadersMisiles[i].getRectf())) {
-                        if (invadersMisiles[i].direccion == Misile.UP) {
-                            invaders[j].makeInvisible();
-                            numInvadersVisibles--;
-                            invadersMisiles[i].desactivar();
-                            score = score + VALUE_OF_INVADER;
-                        }
-                    }
-                }
-            }
-            //Colision con el invader Extra
-            if (invadersMisiles[i].isActivated() &&
-                    invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), invadersMisiles[i].getRectf())) {
-                invaderExtra = new Invader(context, xInicialEx, yInicialEx, screenX, screenY, true);
-                invaderExtra.makeInvisible();
-                invadersMisiles[i].desactivar();
-                score = score + VALUE_OF_INVADER_EXTRA;
-            }
-            //Colision con la barrera
-            if (invadersMisiles[i].isActivated()) {
-                for (int j = 0; j < numBricks; j++) {
-                    if (RectF.intersects(bricks[j].getRect(), invadersMisiles[i].getRectf()) && bricks[j].getVisibility()) {
-                        contadorImpactos++;
-                        bricks[j].setInvisible();
-                        invadersMisiles[i].desactivar();
-
-                    }
-                }
-            }
-        }
+        /** UPDATE DE LAS BALAS MOVIMIENTO & COLISIONES **/
+        updateMoveMisiles();
+        updateColisionesMisiles();
 
 
-        if (contadorImpactos == 1) {
-            cambioColor();
-        } else if (contadorImpactos > 1) {
-            cambioColorAutomatico();
-        }
 
         //Ha impactado un marciano con un bloque o con el jugador
         int numBloque = -1;
@@ -492,9 +379,9 @@ public class View extends SurfaceView implements Runnable {
 
             // Dibuja a las balas del jugador si están activas
 
-            for (int i = 0; i < maxJugadorMisiles; i++) {
-                if (jugadorMisiles[i].isActivated()) {
-                    RectF rect = jugadorMisiles[i].getRectf();
+            for (int i = 0; i < maxShipMisiles; i++) {
+                if (shipMisiles[i].isActivated()) {
+                    RectF rect = shipMisiles[i].getRectf();
                     rect.right -= 13;
                     rect.left -= 13;
                     canvas.drawRect(rect, paint);
@@ -556,13 +443,13 @@ public class View extends SurfaceView implements Runnable {
                         motionEvent.getY() >= screenY / 2 - screenY / 10) {
                     if (adult) {
 
-                        if (jugadorMisiles[nextMisilJugador].shoot(playerShip.getX() + playerShip.getLength(),
+                        if (shipMisiles[nextMisileShip].shoot(playerShip.getX() + playerShip.getLength(),
                                 playerShip.getY() - playerShip.getHeight() / 2, Misile.UP)) {
 
-                            if (nextMisilJugador == maxJugadorMisiles - 1) {
-                                nextMisilJugador = 0;
+                            if (nextMisileShip == maxShipMisiles - 1) {
+                                nextMisileShip = 0;
                             } else {
-                                nextMisilJugador++;
+                                nextMisileShip++;
                             }
                         }
                     }
@@ -610,20 +497,142 @@ public class View extends SurfaceView implements Runnable {
         this.gameActivity.startActivity(intent);
     }
 
-    private void cambioColor() {
-        playerShip.setImagen(context);
-        for (int i = 0; i < numInvaders; i++) {
-            invaders[i].setImagen(context);
+    private void changeColour(int impactos) {
+        if(impactos==1) {
+            playerShip.setImagen(context);
+            for (int i = 0; i < numInvaders; i++) {
+                invaders[i].setImagen(context);
+            }
+            invaderExtra.setImagen(context);
+        }else if(impactos>1){
+            playerShip.serImagenAleatoria(context);
+            for (int i = 0; i < numInvaders; i++) {
+                invaders[i].setImagenAleatoria(context);
+            }
+            invaderExtra.setImagenAleatoria(context);
         }
-        invaderExtra.setImagen(context);
     }
 
-    private void cambioColorAutomatico() {
-        playerShip.serImagenAleatoria(context);
-        for (int i = 0; i < numInvaders; i++) {
-            invaders[i].setImagenAleatoria(context);
+
+
+    private void updateMoveMisiles(){
+        /** ****** UPDATE BALAS DEL JUGADOR ****** **/
+        for (int i = 0; i < maxShipMisiles; i++) {
+            if (shipMisiles[i].isActivated()) {
+                shipMisiles[i].update(fps);
+                if (shipMisiles[i].extrem() >= screenY || shipMisiles[i].extrem() <= 0) {
+                    if (pro) {
+                        shipMisiles[i].cambiarADireccionOpuesta();
+                    } else {
+                        shipMisiles[i].desactivar();
+                    }
+                }
+            }
         }
-        invaderExtra.setImagenAleatoria(context);
+
+        /** ***** UPDATE BALAS DE LOS INVADERS **** **/
+        for (int i = 0; i < maxInvaderMisile; i++) {
+            if (invadersMisiles[i].isActivated()) {
+                invadersMisiles[i].update(fps);
+                if (invadersMisiles[i].extrem() >= screenY || invadersMisiles[i].extrem() <= 0) {
+                    if (pro) {
+                        invadersMisiles[i].cambiarADireccionOpuesta();
+                    } else {
+                        invadersMisiles[i].desactivar();
+                    }
+                }
+            }
+        }
+    }
+
+    private void updateColisionesMisiles(){
+        /** *********COLISIONES DE LAS BALAS DEL JUGADOR********** **/
+
+        int contadorImpactos = 0; //Cuenta los impactos para saber que tipo de cambio de color debe realizar
+
+        for (int i = 0; i < maxShipMisiles; i++) {
+            //Colision con la nave del jugador
+            if (shipMisiles[i].isActivated() && pro) {
+                if (RectF.intersects(shipMisiles[i].getRectf(), playerShip.getRect())) {
+                    shipMisiles[i].desactivar();
+                    finDePartida();
+                }
+            }
+            //Colision con algún invader
+            if (shipMisiles[i].isActivated()) {
+                for (int j = 0; j < numInvaders; j++) {
+                    if (invaders[j].isVisible() && RectF.intersects(invaders[j].getRectf(), shipMisiles[i].getRectf())) {
+                        invaders[j].makeInvisible();
+                        numInvadersVisibles--;
+                        shipMisiles[i].desactivar();
+                        score = score + VALUE_OF_INVADER;
+                    }
+                }
+            }
+            //Colision con el invader extra
+            if (shipMisiles[i].isActivated() &&
+                    invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), shipMisiles[i].getRectf())) {
+                invaderExtra = new Invader(context, xInicialEx, yInicialEx, screenX, screenY, true);
+                invaderExtra.makeInvisible();
+                shipMisiles[i].desactivar();
+                score = score + VALUE_OF_INVADER_EXTRA;
+            }
+            //Colision con la barrera
+            if (shipMisiles[i].isActivated()) {
+
+                for (int j = 0; j < numBricks; j++) {
+                    if (bricks[j].getVisibility() && RectF.intersects(bricks[j].getRect(), shipMisiles[i].getRectf())) {
+                        contadorImpactos++;
+                        shipMisiles[i].desactivar();
+                    }
+                }
+            }
+        }
+
+        /** **********COLISIONES DE LAS BALAS DE LOS INVADERS*********** **/
+        for (int i = 0; i < maxInvaderMisile; i++) {
+            if (invadersMisiles[i].isActivated()) {
+                //Colision con la nave del jugador
+                if (invadersMisiles[i].isActivated() && RectF.intersects(invadersMisiles[i].getRectf(), playerShip.getRect())) {
+                    finDePartida();
+                }
+            }
+            //Colision con la con algún invader
+            if (invadersMisiles[i].isActivated() && pro) {
+                for (int j = 0; j < numInvaders; j++) {
+                    if (invaders[j].isVisible() && RectF.intersects(invaders[j].getRectf(), invadersMisiles[i].getRectf())) {
+                        if (invadersMisiles[i].direccion == Misile.UP) {
+                            invaders[j].makeInvisible();
+                            numInvadersVisibles--;
+                            invadersMisiles[i].desactivar();
+                            score = score + VALUE_OF_INVADER;
+                        }
+                    }
+                }
+            }
+            //Colision con el invader Extra
+            if (invadersMisiles[i].isActivated() &&
+                    invaderExtra.isVisible() && RectF.intersects(invaderExtra.getRectf(), invadersMisiles[i].getRectf())) {
+                invaderExtra = new Invader(context, xInicialEx, yInicialEx, screenX, screenY, true);
+                invaderExtra.makeInvisible();
+                invadersMisiles[i].desactivar();
+                score = score + VALUE_OF_INVADER_EXTRA;
+            }
+            //Colision con la barrera
+            if (invadersMisiles[i].isActivated()) {
+                for (int j = 0; j < numBricks; j++) {
+                    if (RectF.intersects(bricks[j].getRect(), invadersMisiles[i].getRectf()) && bricks[j].getVisibility()) {
+                        contadorImpactos++;
+                        bricks[j].setInvisible();
+                        invadersMisiles[i].desactivar();
+
+                    }
+                }
+            }
+        }
+
+        /** Cambio de color si es necesario **/
+        changeColour(contadorImpactos);
     }
 
 

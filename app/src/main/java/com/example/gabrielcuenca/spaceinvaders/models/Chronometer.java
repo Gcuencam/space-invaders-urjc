@@ -5,7 +5,7 @@ public class Chronometer extends Thread {
 
     public int milesimas;
     public boolean stopped; // estado del contador
-    private int segundos;
+    private int seconds;
 
     // clase interna que representa una tarea, se puede crear varias tareas y asignarle al timer luego
 
@@ -18,7 +18,7 @@ public class Chronometer extends Thread {
 
     public void update() {
         if (this.milesimas == 100) {
-            segundos++;
+            seconds++;
             this.milesimas = 0;
         }
 
@@ -26,18 +26,18 @@ public class Chronometer extends Thread {
 
     public void start() {
         stopped = false;
-        segundos = 0;
+        seconds = 0;
         milesimas = 0;
     }
 
 
     public void reset() {
-        segundos = 0;
+        seconds = 0;
         milesimas = 0;
 
     }// end Reset
 
-    public int getSegundos() {
-        return this.segundos;
+    public int getSeconds() {
+        return this.seconds;
     }
 }
