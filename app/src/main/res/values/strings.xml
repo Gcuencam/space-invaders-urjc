@@ -4,4 +4,10 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="restart">restart</string>
+    <string name="ver_ranking">Ver Ranking</string>
+    <string name="lose">LOSE</string>
+    <string name="you">YOU</string>
+    <string name="points">POINTS</string>
+    <string name="exit_game">exit game</string>
 </resources>

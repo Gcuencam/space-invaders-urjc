@@ -120,7 +120,6 @@ public class View extends SurfaceView implements Runnable {
 
         this.pro = pro;
 
-
         ranking = new Ranking(context, username);
 
         // Hace una copia del "context" disponible globalmete para que la usemos en otro método
@@ -487,6 +486,8 @@ public class View extends SurfaceView implements Runnable {
         paused = true;
         Intent intent = new Intent(this.gameActivity, EndActivity.class);
         intent.putExtra("score", Integer.toString(this.score));
+        intent.putExtra("pro", pro);
+        intent.putExtra("adult", adult);
         String winner = "loser";
         if (win) {
             winner = "winner";
@@ -495,6 +496,7 @@ public class View extends SurfaceView implements Runnable {
         intent.putExtra("user", ranking.userName);
         ranking.save(score);
         this.gameActivity.startActivity(intent);
+
     }
 
     private void changeColour(int impactos) {
