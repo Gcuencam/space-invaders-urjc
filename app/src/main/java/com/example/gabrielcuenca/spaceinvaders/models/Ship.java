@@ -7,6 +7,8 @@ import android.graphics.RectF;
 
 import com.example.gabrielcuenca.spaceinvaders.R;
 
+import java.util.Random;
+
 public class Ship {
     RectF rect;
 
@@ -140,6 +142,15 @@ public class Ship {
         rect.right = x + length-5;
 
     }
+
+    public void desaparecer (){
+        x = -300;
+    }
+
+    public void aparecer(int screenX){
+        x = (int) (Math.random() * screenX)- this.length;
+    }
+
 
 
     public void setImagen(Context context){

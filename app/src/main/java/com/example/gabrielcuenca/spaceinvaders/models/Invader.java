@@ -139,7 +139,6 @@ public class Invader {
     public boolean shoot(){
         Random generator = new Random();
         int random = generator.nextInt(20);
-        System.out.println(random);
         if(random==1){
             return true;
         }else{

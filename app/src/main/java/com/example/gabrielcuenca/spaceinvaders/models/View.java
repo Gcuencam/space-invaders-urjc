@@ -17,6 +17,8 @@ import android.view.SurfaceView;
 import com.example.gabrielcuenca.spaceinvaders.EndActivity;
 import com.example.gabrielcuenca.spaceinvaders.R;
 
+import java.util.Random;
+
 public class View extends SurfaceView implements Runnable {
 
     Context context;
@@ -264,7 +266,7 @@ public class View extends SurfaceView implements Runnable {
             }
             if (invaders[i].shoot() && this.adult && invaders[i].isVisible()) {
                 //Si la bala 'invadersMisiles[nextMisileInvader]' no ha sido disparada se dispara
-                if (invadersMisiles[nextMisileInvader].shoot(invaders[i].getXleft()+invaders[i].getWidth(),
+                if (invadersMisiles[nextMisileInvader].shoot(invaders[i].getXleft() + invaders[i].getWidth(),
                         invaders[i].getY() + invaders[i].getHeight(), Misile.DOWN)) {
 
                     if (nextMisileInvader == maxInvaderMisile - 1) {
@@ -311,7 +313,6 @@ public class View extends SurfaceView implements Runnable {
         updateColisionesMisiles();
 
 
-
         //Ha impactado un marciano con un bloque o con el jugador
         int numBloque = -1;
         for (int i = 0; i < numInvaders; i++) {
@@ -331,7 +332,18 @@ public class View extends SurfaceView implements Runnable {
             }
         }
 
+        //Tiempo aleatorio
+        Random r = new Random();
+        int t = r.nextInt(160);
 
+
+        //Desaparecer nave
+        if (t==2){
+            System.out.println(t);
+            playerShip.desaparecer();
+            //Aparecer nave
+            playerShip.aparecer(screenX);
+        }
     }
 
     private void draw() {
