@@ -2,6 +2,7 @@ package com.example.gabrielcuenca.spaceinvaders;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ public class WelcomeActivity extends AppCompatActivity {
 
     EditText nameInput;
     static Context context;
+    MediaPlayer musicaMenu = new MediaPlayer();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +23,13 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_welcome);
         this.nameInput = (EditText) findViewById(R.id.textInputName);
         this.context = getApplicationContext();
+        musicaMenu = MediaPlayer.create(this, R.raw.ojo_tigreton);
+        musicaMenu.start();
     }
 
     public static Context getContext() {
         return context;
+
     }
 
     public void setActivityBackgroundColor(int color) {
@@ -43,10 +48,12 @@ public class WelcomeActivity extends AppCompatActivity {
             Intent intent = new Intent(WelcomeActivity.this, GameViewActivity.class);
             intent.putExtra("userName", name);
             intent.putExtra("proMode", pro.isChecked());
+            musicaMenu.stop();
             startActivity(intent);
         } else {
             //opcion para niños
             Intent intent2 = new Intent(WelcomeActivity.this, ChildGameViewActivity.class);
+            musicaMenu.stop();
             startActivity(intent2);
         }
     }
