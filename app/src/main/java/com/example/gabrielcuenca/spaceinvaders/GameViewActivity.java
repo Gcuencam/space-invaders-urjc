@@ -2,13 +2,14 @@ package com.example.gabrielcuenca.spaceinvaders;
 
 import android.app.Activity;
 import android.graphics.Point;
-import android.os.Build;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.Display;
-import android.widget.CheckBox;
 
+import com.example.gabrielcuenca.spaceinvaders.models.Chronometer;
 import com.example.gabrielcuenca.spaceinvaders.models.View;
+
+import java.util.Random;
 
 
 // SpaceInvadersActivity es el punto de entrada al juego.
@@ -21,6 +22,12 @@ public class GameViewActivity extends Activity {
     // También tendrá la lógica del juego
     // y responderá a los toques a la pantalla
     View spaceInvadersView;
+    MediaPlayer musica = new MediaPlayer();
+    Chronometer time = new Chronometer();
+    Random rand= new Random();
+    int numeroRand1 = rand.nextInt(2);
+    int numeroRand2 = rand.nextInt(1);
+    int trackN;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +46,80 @@ public class GameViewActivity extends Activity {
         spaceInvadersView = new View(this, size.x, size.y, this, true,name,proMode);
         setContentView(spaceInvadersView);
 
+        //Comienza la primera cancion.
+        if ( !musica.isPlaying()) {
+            switch (numeroRand1) {
+                case 0:
+                    musica = MediaPlayer.create(this, R.raw.kyojin);
+                    musica.start();
+                    trackN = 0;
+                    break;
+                case 1:
+                    musica = MediaPlayer.create(this, R.raw.boss_battle);
+                    musica.start();
+                    trackN = 1;
+                    break;
+                case 2:
+                    musica = MediaPlayer.create(this, R.raw.real_emotion);
+                    musica.start();
+                    trackN = 2;
+                    break;
+            }
+        }
+
+        // loop para cambio de canciones. Controlamos que una cancion no pueda repetirse dos veces seguidas.
+
+        time.start();
+        if (time.getSeconds() == 20){
+            musica.release();
+            switch (trackN){
+                case 0 :
+                    switch (numeroRand2){
+                        case 0 :
+                            musica = MediaPlayer.create(this, R.raw.boss_battle);
+                            musica.start();
+                            trackN = 1;
+                            break;
+
+                        case 1 :
+                            musica = MediaPlayer.create(this, R.raw.real_emotion);
+                            musica.start();
+                            trackN = 2;
+                            break;
+                    }
+                    break;
+
+                case 1 :
+                    switch (numeroRand2){
+                        case 0 :
+                            musica = MediaPlayer.create(this, R.raw.kyojin);
+                            musica.start();
+                            trackN = 0;
+                            break;
+                        case 1 :
+                            musica = MediaPlayer.create(this, R.raw.real_emotion);
+                            musica.start();
+                            trackN = 2;
+                            break;
+                    }
+                case 2 :
+                    switch (numeroRand2){
+                        case 0 :
+                            musica = MediaPlayer.create(this, R.raw.kyojin);
+                            musica.start();
+                            trackN = 0;
+                            break;
+                        case 1:
+                            musica = MediaPlayer.create(this, R.raw.boss_battle);
+                            musica.start();
+                            trackN = 1;
+                            break;
+                    }
+            }
+        }
+
+
+
     }
 
     // Este método se ejecuta cuando el jugador empieza el juego
@@ -48,14 +129,17 @@ public class GameViewActivity extends Activity {
 
         // Le dice al método de reanudar del gameView que se ejecute
         spaceInvadersView.resume();
+        // Reanuda la cancion
+        musica.start();
     }
 
     // Este método se ejecuta cuando el jugador se sale del juego
     @Override
     protected void onPause() {
         super.onPause();
-
         // Le dice al método de pausa del gameView que se ejecute
         spaceInvadersView.pause();
+        // Pausa la cancion
+        musica.pause();
     }
 }
