@@ -1,6 +1,7 @@
 package com.example.gabrielcuenca.spaceinvaders;
 
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.gabrielcuenca.spaceinvaders.models.Ranking;
+import com.example.gabrielcuenca.spaceinvaders.utils.CameraManager;
+
 import android.view.View;
-import java.lang.Process;
 
 public class EndActivity extends AppCompatActivity {
 
@@ -26,7 +28,7 @@ public class EndActivity extends AppCompatActivity {
 
         Intent intent = getIntent(); // gets the previously created intent
         this.score = intent.getStringExtra("score");
-        this.win= intent.getStringExtra("win");
+        this.win = intent.getStringExtra("win");
         this.userName = intent.getStringExtra("user");
 
         this.pro = intent.getExtras().getBoolean("pro");
@@ -38,9 +40,9 @@ public class EndActivity extends AppCompatActivity {
         Ranking.addScore(n);
 
         //Creamos la referencia del boton de reinicio
-        Button bRestart = (Button)findViewById(R.id.buttonRestart);
+        Button bRestart = (Button) findViewById(R.id.buttonRestart);
 
-        if(win.equals("winner")){
+        if (win.equals("winner")) {
             TextView ganar = findViewById(R.id.estadoText);
             ganar.setText("WIN");
         }
@@ -48,31 +50,41 @@ public class EndActivity extends AppCompatActivity {
         textView.setText(this.score);
 
         //Si la puntuacion es menor de 500 puntos no se podra reiniciar la partida
-        if(n < 500){
+        if (n < 500) {
             bRestart.setVisibility(View.GONE);
         }
     }
 
-    public void selectRanking (View view){
-        Intent intent = new Intent(EndActivity.this, RankingActivity.class);
-        intent.putExtra("user", userName);
-        startActivity(intent);
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, CameraManager.REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    public void selectRanking(View view) {
+        if (CameraManager.checkCameraHardware(WelcomeActivity.getContext())) {
+            this.dispatchTakePictureIntent();
+        }
+        //Intent intent = new Intent(EndActivity.this, RankingActivity.class);
+        //intent.putExtra("user", userName);
+        //startActivity(intent);
     }
 
     //Metodo para reiniciar el juego
     public void restartGame(View view) {
 
-            if(adult){
-                //si se ha jugado el modo para adultos...
-                Intent intent = new Intent(EndActivity.this, GameViewActivity.class);
-                intent.putExtra("userName", userName);
-                intent.putExtra("proMode", pro);
-                startActivity(intent);
-            }else {
-                //si se ha jugado el modo para niños...
-                Intent intent2 = new Intent(EndActivity.this, ChildGameViewActivity.class);
-                startActivity(intent2);
-            }
+        if (adult) {
+            //si se ha jugado el modo para adultos...
+            Intent intent = new Intent(EndActivity.this, GameViewActivity.class);
+            intent.putExtra("userName", userName);
+            intent.putExtra("proMode", pro);
+            startActivity(intent);
+        } else {
+            //si se ha jugado el modo para niños...
+            Intent intent2 = new Intent(EndActivity.this, ChildGameViewActivity.class);
+            startActivity(intent2);
+        }
     }
 
     //Método para salir del juego
