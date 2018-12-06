@@ -26,9 +26,6 @@ public class View extends SurfaceView implements Runnable {
     //Cronómetro
     private Chronometer time = new Chronometer();
 
-    //Ranking
-    public Ranking ranking;
-
     // Esta es nuestra secuencia
     private Thread gameThread = null;
 
@@ -121,8 +118,6 @@ public class View extends SurfaceView implements Runnable {
         win = false;
 
         this.pro = pro;
-
-        ranking = new Ranking(context, username);
 
         // Hace una copia del "context" disponible globalmete para que la usemos en otro método
         this.context = context;
@@ -505,8 +500,8 @@ public class View extends SurfaceView implements Runnable {
             winner = "winner";
         }
         intent.putExtra("win", winner);
-        intent.putExtra("user", ranking.userName);
-        ranking.save(score);
+        //intent.putExtra("user", ranking.userName);
+        //ranking.save(score);
         this.gameActivity.startActivity(intent);
 
     }

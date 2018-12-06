@@ -3,92 +3,78 @@ package com.example.gabrielcuenca.spaceinvaders.models;
 import android.content.Context;
 import android.util.Log;
 
-import java.io.BufferedReader;
+import com.example.gabrielcuenca.spaceinvaders.WelcomeActivity;
+import com.example.gabrielcuenca.spaceinvaders.utils.MapSorter;
+
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
-public class Ranking {
+public final class Ranking {
 
-    public ArrayList<Score> puntuaciones = new ArrayList<>();
-    public  String userName;
-    public Context context;
+    private static HashMap<String, Integer> ranking = new HashMap<String, Integer>();
+    public static String userName;
+    private static Context context;
 
-    public void setUserName(String s){
-        userName=s;
+
+    public static void setup() {
+        context = WelcomeActivity.getContext();
+        load();
     }
 
-    public Ranking(Context context, String username) {
-        this.context = context;
-        this.userName=username;
+    public static Map<String, Integer> getRanking() {
+        return ranking;
     }
 
+    public static void addScore(int score) {
+        ranking.put(Ranking.userName, score);
+        save();
+        Log.w("myApp", String.valueOf(context.getFilesDir()));
 
-    public void save(int score) {
-        String lineaAleer = "";
+    }
+
+    private static void save() {
+        Properties properties = new Properties();
+
+        for (Map.Entry<String, Integer> entry : ranking.entrySet()) {
+            properties.put(entry.getKey(), Integer.toString(entry.getValue()));
+        }
+        Log.w("myApp", String.valueOf(context.getFilesDir()));
         try {
-            BufferedReader fin =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    context.openFileInput("zariguella.txt")));
-            lineaAleer = fin.readLine();
+            properties.store(new FileOutputStream(context.getFilesDir() + "/scores.properties"), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void load() {
+        Properties properties = new Properties();
+        try {
+            properties.load(new FileInputStream(context.getFilesDir() + "/scores.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
 
-            OutputStreamWriter fout =
-                    new OutputStreamWriter(
-                            context.openFileOutput("zariguella.txt", Context.MODE_PRIVATE));
-
-            if (lineaAleer != null)
-                fout.write(lineaAleer + "" + userName + ":" + score + "pts");
-            else
-                fout.write(userName + ": " + score + "pts");
-            fout.close();
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        for (String key : properties.stringPropertyNames()) {
+            ranking.put(key, Integer.parseInt((String) properties.get(key)));
         }
+
     }
 
-    public String[] load() {
-        try {
-            BufferedReader fin =
-                    new BufferedReader(
-                            new InputStreamReader(
-                                    context.openFileInput("zariguella.txt")));
-            String lineaActual;
-            while ((lineaActual = fin.readLine()) != null) {
-                System.out.println(lineaActual);
-                String[] puntuacioneGuardadas = lineaActual.split("pts");
-                for (int i = 0; i < puntuacioneGuardadas.length; i++) {
-                    String[] datosPuntuacion = puntuacioneGuardadas[i].split(":");
-                    System.out.println(datosPuntuacion[0] + "-" + datosPuntuacion[1]);
-                    puntuaciones.add(new Score(Integer.parseInt(datosPuntuacion[1].trim()),datosPuntuacion[0]));
-                }
-
+    public static String[] toArray() {
+        HashMap<String, Integer> sortedRanking = MapSorter.sortByValues(ranking);
+        String[] a = new String[sortedRanking.size() > 10 ? 10 : sortedRanking.size()];
+        int i = 0;
+        for (Map.Entry<String, Integer> entry : sortedRanking.entrySet()) {
+            a[i] = entry.getKey() + " - " + Integer.toString((entry.getValue()));
+            i++;
+            if (i == 10) {
+                break;
             }
-            fin.close();
-
-            Log.i("Ficheros", "Todo bien, todo correcto");
-        } catch (FileNotFoundException e) {
-            Log.i("Ficheros", "El fichero no está");
-        } catch (IOException e) {
-            Log.i("Ficheros", "RIP");
         }
-        String[] array = new String[puntuaciones.size()];
-        Collections.sort(puntuaciones);
-        for (int i = 0; i < (puntuaciones.size()) && (i<10); i++) {
-            array[i] = puntuaciones.get(i).getName() + ": " +puntuaciones.get(i).getScore();
-        }
-
-
-        return array;
+        return a;
     }
 }

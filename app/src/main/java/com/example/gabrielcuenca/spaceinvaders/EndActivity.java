@@ -3,6 +3,7 @@ package com.example.gabrielcuenca.spaceinvaders;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -33,6 +34,9 @@ public class EndActivity extends AppCompatActivity {
 
         int n = Integer.parseInt(score);
 
+        Ranking.setup();
+        Ranking.addScore(n);
+
         //Creamos la referencia del boton de reinicio
         Button bRestart = (Button)findViewById(R.id.buttonRestart);
 
@@ -51,7 +55,7 @@ public class EndActivity extends AppCompatActivity {
 
     public void selectRanking (View view){
         Intent intent = new Intent(EndActivity.this, RankingActivity.class);
-        intent.putExtra("user",userName);
+        intent.putExtra("user", userName);
         startActivity(intent);
     }
 
