@@ -334,7 +334,7 @@ public class View extends SurfaceView implements Runnable {
 
         //Tiempo aleatorio
         Random r = new Random();
-        int t = r.nextInt(160);
+        int t = r.nextInt(280);
 
 
         //Desaparecer nave
