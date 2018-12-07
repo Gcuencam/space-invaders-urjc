@@ -1,6 +1,7 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.example.gabrielcuenca.spaceinvaders.WelcomeActivity;
@@ -16,6 +17,7 @@ import java.util.Properties;
 public final class Ranking {
 
     private static HashMap<String, Integer> ranking = new HashMap<String, Integer>();
+    private static HashMap<String, Bitmap> images = new HashMap<String, Bitmap>();
     public static String userName;
     private static Context context;
 
@@ -29,8 +31,9 @@ public final class Ranking {
         return ranking;
     }
 
-    public static void addScore(int score) {
+    public static void addScore(int score, Bitmap userPhoto) {
         ranking.put(Ranking.userName, score);
+        images.put(Ranking.userName, userPhoto);
         save();
         Log.w("myApp", String.valueOf(context.getFilesDir()));
 

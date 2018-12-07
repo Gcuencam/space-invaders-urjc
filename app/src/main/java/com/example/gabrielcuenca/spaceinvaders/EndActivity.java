@@ -1,11 +1,13 @@
 package com.example.gabrielcuenca.spaceinvaders;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.gabrielcuenca.spaceinvaders.models.Ranking;
@@ -36,9 +38,6 @@ public class EndActivity extends AppCompatActivity {
 
         int n = Integer.parseInt(score);
 
-        Ranking.setup();
-        Ranking.addScore(n);
-
         //Creamos la referencia del boton de reinicio
         Button bRestart = (Button) findViewById(R.id.buttonRestart);
 
@@ -53,6 +52,10 @@ public class EndActivity extends AppCompatActivity {
         if (n < 500) {
             bRestart.setVisibility(View.GONE);
         }
+
+        if (CameraManager.checkCameraHardware(WelcomeActivity.getContext())) {
+            this.dispatchTakePictureIntent();
+        }
     }
 
     public void dispatchTakePictureIntent() {
@@ -62,13 +65,29 @@ public class EndActivity extends AppCompatActivity {
         }
     }
 
-    public void selectRanking(View view) {
-        if (CameraManager.checkCameraHardware(WelcomeActivity.getContext())) {
-            this.dispatchTakePictureIntent();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == CameraManager.REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            Bitmap imageBitmapCropped = Bitmap.createBitmap(
+                imageBitmap,
+                0,
+                imageBitmap.getHeight() / 2 - imageBitmap.getWidth() / 2,
+                imageBitmap.getWidth(),
+                imageBitmap.getWidth()
+            );
+            ImageView userPhoto = (ImageView) findViewById(R.id.userPhoto);
+            userPhoto.setImageBitmap(imageBitmapCropped);
+            Ranking.setup();
+            Ranking.addScore(Integer.parseInt(this.score), imageBitmapCropped);
         }
-        //Intent intent = new Intent(EndActivity.this, RankingActivity.class);
-        //intent.putExtra("user", userName);
-        //startActivity(intent);
+    }
+
+    public void selectRanking(View view) {
+        Intent intent = new Intent(EndActivity.this, RankingActivity.class);
+        intent.putExtra("user", userName);
+        startActivity(intent);
     }
 
     //Metodo para reiniciar el juego
