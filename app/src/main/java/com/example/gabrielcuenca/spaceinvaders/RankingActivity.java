@@ -23,7 +23,7 @@ public class RankingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ranking_activity);
-        musica = MediaPlayer.create(this, R.raw.gohans_anger);
+        musica = MediaPlayer.create(this, R.raw.danza_kuduro);
         musica.start();
         try {
             HashMap<String, Integer> sortedRanking = MapSorter.sortByValues(Ranking.getRanking());
