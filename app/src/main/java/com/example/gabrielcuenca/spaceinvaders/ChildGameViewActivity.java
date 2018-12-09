@@ -2,11 +2,15 @@ package com.example.gabrielcuenca.spaceinvaders;
 
 import android.app.Activity;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Display;
 
+import com.example.gabrielcuenca.spaceinvaders.models.Chronometer;
 import com.example.gabrielcuenca.spaceinvaders.models.View;
+
+import java.util.Random;
 
 public class ChildGameViewActivity extends Activity
 {
@@ -14,6 +18,8 @@ public class ChildGameViewActivity extends Activity
     // También tendrá la lógica del juego
     // y responderá a los toques a la pantalla
     View spaceInvadersView;
+    private MediaPlayer musica = new MediaPlayer();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +35,10 @@ public class ChildGameViewActivity extends Activity
         spaceInvadersView = new View(this, size.x, size.y, this, false,"child",false);
         setContentView(spaceInvadersView);
 
+        //Comienza la primera cancion.
+        musica = MediaPlayer.create(this, R.raw.fleeting_dream);
+
+
     }
 
     // Este método se ejecuta cuando el jugador empieza el juego
@@ -38,6 +48,8 @@ public class ChildGameViewActivity extends Activity
 
         // Le dice al método de reanudar del gameView que se ejecute
         spaceInvadersView.resume();
+        // Reanuda la cancion
+        musica.start();
     }
 
     // Este método se ejecuta cuando el jugador se sale del juego
@@ -47,5 +59,7 @@ public class ChildGameViewActivity extends Activity
 
         // Le dice al método de pausa del gameView que se ejecute
         spaceInvadersView.pause();
+        // Pausa la cancion
+        musica.pause();
     }
 }

@@ -23,11 +23,9 @@ public class GameViewActivity extends Activity {
     // y responderá a los toques a la pantalla
     View spaceInvadersView;
     MediaPlayer musica = new MediaPlayer();
-    Chronometer time = new Chronometer();
-    Random rand= new Random();
-    int numeroRand1 = rand.nextInt(2);
-    int numeroRand2 = rand.nextInt(1);
-    int trackN;
+    Random rand = new Random();
+    int numeroRand1 = rand.nextInt(3);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,84 +41,32 @@ public class GameViewActivity extends Activity {
         String name = getIntent().getExtras().getString("userName");
 
         boolean proMode = getIntent().getExtras().getBoolean("proMode");
-        spaceInvadersView = new View(this, size.x, size.y, this, true,name,proMode);
+        spaceInvadersView = new View(this, size.x, size.y, this, true, name, proMode);
         setContentView(spaceInvadersView);
 
-        //Comienza la primera cancion.
-        if ( !musica.isPlaying()) {
+        //Comienza la musica.
+
+        if (musica.isPlaying() == false) {
             switch (numeroRand1) {
                 case 0:
-                    musica = MediaPlayer.create(this, R.raw.kyojin);
+                    musica = MediaPlayer.create(this, R.raw.invaders_music);
                     musica.start();
-                    trackN = 0;
+                    musica.setLooping(true);
                     break;
                 case 1:
-                    musica = MediaPlayer.create(this, R.raw.boss_battle);
+                    musica = MediaPlayer.create(this, R.raw.invaders_music2);
                     musica.start();
-                    trackN = 1;
+                    musica.setLooping(true);
                     break;
                 case 2:
-                    musica = MediaPlayer.create(this, R.raw.real_emotion);
+                    musica = MediaPlayer.create(this, R.raw.invaders_music3);
                     musica.start();
-                    trackN = 2;
+                    musica.setLooping(true);
                     break;
             }
         }
-
-        // loop para cambio de canciones. Controlamos que una cancion no pueda repetirse dos veces seguidas.
-
-        time.start();
-        if (time.getSeconds() == 20){
-            musica.release();
-            switch (trackN){
-                case 0 :
-                    switch (numeroRand2){
-                        case 0 :
-                            musica = MediaPlayer.create(this, R.raw.boss_battle);
-                            musica.start();
-                            trackN = 1;
-                            break;
-
-                        case 1 :
-                            musica = MediaPlayer.create(this, R.raw.real_emotion);
-                            musica.start();
-                            trackN = 2;
-                            break;
-                    }
-                    break;
-
-                case 1 :
-                    switch (numeroRand2){
-                        case 0 :
-                            musica = MediaPlayer.create(this, R.raw.kyojin);
-                            musica.start();
-                            trackN = 0;
-                            break;
-                        case 1 :
-                            musica = MediaPlayer.create(this, R.raw.real_emotion);
-                            musica.start();
-                            trackN = 2;
-                            break;
-                    }
-                case 2 :
-                    switch (numeroRand2){
-                        case 0 :
-                            musica = MediaPlayer.create(this, R.raw.kyojin);
-                            musica.start();
-                            trackN = 0;
-                            break;
-                        case 1:
-                            musica = MediaPlayer.create(this, R.raw.boss_battle);
-                            musica.start();
-                            trackN = 1;
-                            break;
-                    }
-            }
-        }
-
-
-
     }
+
 
     // Este método se ejecuta cuando el jugador empieza el juego
     @Override

@@ -1,6 +1,7 @@
 package com.example.gabrielcuenca.spaceinvaders;
 
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,12 +14,17 @@ import com.example.gabrielcuenca.spaceinvaders.utils.MapSorter;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class RankingActivity extends AppCompatActivity {
+
+    MediaPlayer musica = new MediaPlayer();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.ranking_activity);
-
+        musica = MediaPlayer.create(this, R.raw.gohans_anger);
+        musica.start();
         try {
             HashMap<String, Integer> sortedRanking = MapSorter.sortByValues(Ranking.getRanking());
             HashMap<String, Bitmap> images = Ranking.getImages();

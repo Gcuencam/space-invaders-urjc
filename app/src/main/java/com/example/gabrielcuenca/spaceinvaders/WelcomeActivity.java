@@ -49,11 +49,13 @@ public class WelcomeActivity extends AppCompatActivity {
             intent.putExtra("userName", name);
             intent.putExtra("proMode", pro.isChecked());
             musicaMenu.stop();
+            musicaMenu.release();
             startActivity(intent);
         } else {
             //opcion para niños
             Intent intent2 = new Intent(WelcomeActivity.this, ChildGameViewActivity.class);
             musicaMenu.stop();
+            musicaMenu.release();
             startActivity(intent2);
         }
     }

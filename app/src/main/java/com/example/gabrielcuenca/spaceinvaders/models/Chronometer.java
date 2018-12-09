@@ -1,6 +1,8 @@
 package com.example.gabrielcuenca.spaceinvaders.models;
 
 
+import android.os.health.SystemHealthManager;
+
 public class Chronometer extends Thread {
 
     public int milesimas;
@@ -29,6 +31,7 @@ public class Chronometer extends Thread {
         seconds = 0;
         milesimas = 0;
     }
+
 
 
     public void reset() {

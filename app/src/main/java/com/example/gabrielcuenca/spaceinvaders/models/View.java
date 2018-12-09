@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -25,7 +26,6 @@ public class View extends SurfaceView implements Runnable {
 
     //Cronómetro
     private Chronometer time = new Chronometer();
-
     // Esta es nuestra secuencia
     private Thread gameThread = null;
 
@@ -100,7 +100,6 @@ public class View extends SurfaceView implements Runnable {
     private boolean pro;
 
     private boolean win = true;
-
     public int getNumInvaders() {
         return this.numInvaders;
     }
@@ -223,9 +222,14 @@ public class View extends SurfaceView implements Runnable {
             }
 
             // Vamos a hacer algo nuevo aquí hacia el final de proyecto
+            time = new Chronometer();
+
+            //Comienza la primera cancion.
 
         }
+
     }
+
 
     private void update() {
 
@@ -303,6 +307,8 @@ public class View extends SurfaceView implements Runnable {
             time.reset();
         }
 
+
+
         /** UPDATE DE LAS BALAS MOVIMIENTO & COLISIONES **/
         updateMoveMisiles();
         updateColisionesMisiles();
@@ -329,7 +335,7 @@ public class View extends SurfaceView implements Runnable {
 
         //Tiempo aleatorio
         Random r = new Random();
-        int t = r.nextInt(280);
+        int t = r.nextInt(500);
 
 
         //Desaparecer nave
